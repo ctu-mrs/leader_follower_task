@@ -8,8 +8,8 @@
 
 # MRS Summer School 2020
 
-| Build status | [![Build Status](https://github.com/ctu-mrs/uvdar_leader_follower/workflows/Melodic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) | [![Build Status](https://github.com/ctu-mrs/uvdar_leader_follower/workflows/Noetic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Melodic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Noetic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 ## Leader-follower operation without communication
 
@@ -17,9 +17,17 @@ In this task, we will explore a state-of-the-art system for coordinated motion o
 
 ## Installation
 1) The installation requires the open-source [MRS system](https://github.com/ctu-mrs/mrs_uav_system), or if you prefer to install it separately, you will need the [uav_core](https://github.com/ctu-mrs/uav_core) and [simulation](https://github.com/ctu-mrs/simulation) repositories.
-2) You will also need to install the [UVDAR core](https://github.com/ctu-mrs/uvdar) and the [UVDAR plugin](https://github.com/ctu-mrs/uvdar_gazebo_plugin) for the Gazebo simulator.
-3) Further install the [summer_school_supervisor](https://github.com/ctu-mrs/summer_school_supervisor), which will be enforcing the rules of the competition for this task.
-4) Finally, you will need to install the [trajectory_loader](https://github.com/ctu-mrs/trajectory_loader). This package will help you load a trajectory for the leader UAV, which will come in handy for testing in simulations.
+> **_NOTE:_** If you install simulation separately, manually checkout to commit 756dfa0e60eef0e92486496e8615d9801c8690b7
+2) After installing the system, clone this repository and its submodules:
+```bash
+cd ~/git
+git clone https://github.com/ctu-mrs/leader_follower_task.git
+cd leader_follower_task
+gitman install
+````
+
+3) Link the content of leader_follower_task/ros_packages into your catkin workspace
+4) Build the catkin workspace
 
 ## Task overview
 
