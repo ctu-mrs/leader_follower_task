@@ -8,8 +8,8 @@
 
 # MRS Summer School 2020
 
-| Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Melodic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Noetic/badge.svg)](https://github.com/ctu-mrs/uvdar_leader_follower/actions) |
-|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Melodic/badge.svg)](https://github.com/ctu-mrs/leader_follower_task/actions) | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/Noetic/badge.svg)](https://github.com/ctu-mrs/leader_follower_task/actions) |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 ## Leader-follower operation without communication
 
@@ -26,8 +26,17 @@ cd leader_follower_task
 gitman install
 ````
 
-3) Link the content of leader_follower_task/ros_packages into your catkin workspace
+3) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
+```bash
+cd ~/workspace/src
+ln -s ~/git/leader_follower_task/ros_packages/*
+````
+
 4) Build the catkin workspace
+```bash
+cd ~/workspace
+catkin build
+````
 
 ## Task overview
 
