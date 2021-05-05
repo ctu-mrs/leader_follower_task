@@ -28,6 +28,9 @@ git reset --hard 756dfa0e60eef0e92486496e8615d9801c8690b7
 echo "running the main install.sh"
 ./installation/install.sh
 
+#fix mrs_gazebo_common_resources build on Ubuntu 20.04
+sudo apt-get upgrade -y libignition-common3*
+
 echo "clone leader_follower_task"
 cd
 git clone https://github.com/ctu-mrs/leader_follower_task.git
