@@ -29,7 +29,7 @@ gitman install
 3) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
 ```bash
 cd ~/workspace/src
-ln -sf ~/git/leader_follower_task/ros_packages/*
+ln -sf ~/git/leader_follower_task/ros_packages/* .
 ````
 
 4) Build the catkin workspace
