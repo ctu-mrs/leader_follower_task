@@ -6,8 +6,6 @@ distro=`lsb_release -r | awk '{ print $2 }'`
 [ "$distro" = "18.04" ] && ROS_DISTRO="melodic"
 [ "$distro" = "20.04" ] && ROS_DISTRO="noetic"
 
-MY_PATH=`pwd`
-
 echo "Starting install preparation"
 
 sudo apt-get -y install git
@@ -39,8 +37,7 @@ mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src
 ln -s ~/uav_core
 ln -s ~/simulation
-ln -s ~/leader_follower_task/ros_packages/*
-ln -s "$MY_PATH" leader_follower_task 
+ln -s ~/leader_follower_task
 source /opt/ros/$ROS_DISTRO/setup.bash
 cd ~/catkin_ws
 catkin init
