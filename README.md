@@ -17,8 +17,14 @@ In this task, we will explore a state-of-the-art system for coordinated motion o
 
 ## Installation
 1) The installation requires the open-source [MRS system](https://github.com/ctu-mrs/mrs_uav_system), or if you prefer to install it separately, you will need the [uav_core](https://github.com/ctu-mrs/uav_core) and [simulation](https://github.com/ctu-mrs/simulation) repositories.
-> **_NOTE:_** If you install simulation separately, manually checkout to commit 756dfa0e60eef0e92486496e8615d9801c8690b7
-2) After installing the system, clone this repository and its submodules:
+
+2) Manually checkout to commit `756dfa0e60eef0e92486496e8615d9801c8690b7` for the simulation repository
+```bash
+cd ~/git/simulation
+git checkout 756dfa0e60eef0e92486496e8615d9801c8690b7
+````
+
+3) After installing the system, clone this repository and its submodules:
 ```bash
 cd ~/git
 git clone https://github.com/ctu-mrs/leader_follower_task.git
@@ -26,13 +32,13 @@ cd leader_follower_task
 gitman install
 ````
 
-3) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
+4) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
 ```bash
 cd ~/workspace/src
 ln -sf ~/git/leader_follower_task/ros_packages/* .
 ````
 
-4) Build the catkin workspace
+5) Build the catkin workspace
 ```bash
 cd ~/workspace
 catkin build
