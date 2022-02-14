@@ -1,37 +1,72 @@
 location: .gitman
 sources:
-  - name: uvdar_leader_follower
+  - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
+    name: uvdar_leader_follower
+    rev: master
     type: git
-    repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     sparse_paths:
       -
-    rev: master
     link: ros_packages/uvdar_leader_follower
-  - name: uvdar_core
-    type: git
-    repo: https://github.com/ctu-mrs/uvdar_core.git
-    sparse_paths:
+    links:
       -
+    scripts:
+      -
+  - repo: https://github.com/ctu-mrs/uvdar_core.git
+    name: uvdar_core
     rev: d6c7edb3a36909cdbc87b45231b6f8360302936e
+    type: git
+    sparse_paths:
+      -
     link: ros_packages/uvdar_core
-  - name: uvdar_gazebo_plugin
-    type: git
-    repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
-    sparse_paths:
+    links:
       -
+    scripts:
+      -
+  - repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
+    name: uvdar_gazebo_plugin
     rev: a1546bf67d5c075844e81173518e058cd48185d3
+    type: git
+    sparse_paths:
+      -
     link: ros_packages/uvdar_gazebo_plugin
-  - name: summer_school_supervisor
+    links:
+      -
+    scripts:
+      -
+  - repo: https://github.com/ctu-mrs/summer_school_supervisor.git
+    name: summer_school_supervisor
+    rev: master
     type: git
-    repo: https://github.com/ctu-mrs/summer_school_supervisor.git
     sparse_paths:
       -
-    rev: master
     link: ros_packages/summer_school_supervisor
-  - name: trajectory_loader
+    links:
+      -
+    scripts:
+      -
+  - repo: https://github.com/ctu-mrs/trajectory_loader.git
+    name: trajectory_loader
+    rev: master
     type: git
-    repo: https://github.com/ctu-mrs/trajectory_loader.git
     sparse_paths:
       -
-    rev: master
     link: ros_packages/trajectory_loader
+    links:
+      -
+    scripts:
+      -
+sources_locked:
+  - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
+    name: uvdar_leader_follower
+    rev: d19dedbf00eeeceb099652ea22b66eb3fce09982
+    type: git
+    sparse_paths:
+      -
+    link: ros_packages/uvdar_leader_follower
+    links:
+      -
+    scripts:
+      -
+default_group: ''
+groups:
+  -
