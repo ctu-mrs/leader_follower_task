@@ -18,13 +18,7 @@ In this task, we will explore a state-of-the-art system for coordinated motion o
 ## Installation
 1) The installation requires the open-source [MRS system](https://github.com/ctu-mrs/mrs_uav_system), or if you prefer to install it separately, you will need the [uav_core](https://github.com/ctu-mrs/uav_core) and [simulation](https://github.com/ctu-mrs/simulation) repositories.
 
-2) Manually checkout to commit `756dfa0e60eef0e92486496e8615d9801c8690b7` for the simulation repository
-```bash
-cd ~/git/simulation
-git checkout 756dfa0e60eef0e92486496e8615d9801c8690b7
-````
-
-3) After installing the system, clone this repository and its submodules:
+2) After installing the system, clone this repository and its submodules:
 ```bash
 cd ~/git
 git clone https://github.com/ctu-mrs/leader_follower_task.git
@@ -32,13 +26,13 @@ cd leader_follower_task
 gitman install
 ````
 
-4) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
+3) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
 ```bash
 cd ~/workspace/src
 ln -sf ~/git/leader_follower_task/ros_packages/* .
 ````
 
-5) Build the catkin workspace
+4) Build the catkin workspace
 ```bash
 cd ~/workspace
 catkin build
@@ -77,12 +71,12 @@ Upon running the script, you should see 3 windows opening up:
 
 * Gazebo - realistic simulator with 3D graphics visualization
 * RVIZ - lightweight visualization tool for graphic representation of ROS messages
-* UVDAR simulation - two mostly black screens, which represent the view of the cameras onboard the follower UAV
+* UVDAR visualization - view of the two cameras onboard the follower UAV
 
 ### How to confirm everything works
 * In the Gazebo GUI, check that the time at the bottom of the window is running.
 * After a few seconds, you should see two drones. The drones will take off automatically.
-* After the takeoff, you should see markers in one of the UVDAR camera views. These represent the blinking LED lights on the leader drone.
+* After the takeoff, you should see red and blue markers in one of the UVDAR camera views. These represent the blinking LED lights on the leader drone, and should be assigned ID: 0.
 
 ### Starting the task
 You may notice, that your terminal opened multiple tabs. Consult the first page of the [MRS Cheatsheet](https://github.com/ctu-mrs/mrs_cheatsheet) if you need help navigating the tabs and panes.
@@ -92,6 +86,11 @@ You may notice, that your terminal opened multiple tabs. Consult the first page 
 * Switch to the `follower` tab, hit the up arrow and then enter. The pre-filled command will launch the `summer_school_supervisor`. This is the program, which will periodically call your code.
 * Finally, switch to the `start_challenge` tab, hit the up arrow and pres enter. The leader will begin tracking the trajectory, and the score counter will start.
 * Now, you can navigate back to the `follower` tab, and observe the simulation. Once the visual contact is broken, the process in the follower tab will print out the score.
+
+### How to close the simulation
+* Do not close the terminal window, the processes may remain running in the background.
+* Use the following key shorcut: press `ctrl + a`, then release and then press `k`. This will close all the terminal tabs, which have been opened by the simulator
+* We strongly recommend using the key shortcut to kill every simulation, to prevent zombie processes ruining your future simulations.
 
 ## Implementation tips
 
