@@ -1,5 +1,16 @@
 location: .gitman
 sources:
+  - repo: https://github.com/ctu-mrs/mrs_serial.git
+    name: mrs_serial
+    rev: master
+    type: git
+    sparse_paths:
+      -
+    link: ros_packages/mrs_serial
+    links:
+      -
+    scripts:
+      -
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
     rev: master
@@ -58,7 +69,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: fd4f8a5d838fbffbfdce3e23073f3a903258c027
+    rev: 50e7724fc85253dd33448c7b199fba64970a1f91
     type: git
     sparse_paths:
       -
