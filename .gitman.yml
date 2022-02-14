@@ -12,14 +12,14 @@ sources:
     repo: https://github.com/ctu-mrs/uvdar_core.git
     sparse_paths:
       -
-    rev: 43aae307e9aa76d7544d66c49c989f66795339dc
+    rev: d6c7edb3a36909cdbc87b45231b6f8360302936e
     link: ros_packages/uvdar_core
   - name: uvdar_gazebo_plugin
     type: git
     repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
     sparse_paths:
       -
-    rev: 2c00af788aba15559de76175a78da1c9cd2eab0d
+    rev: a1546bf67d5c075844e81173518e058cd48185d3
     link: ros_packages/uvdar_gazebo_plugin
   - name: summer_school_supervisor
     type: git
