@@ -24,7 +24,7 @@ sources:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_core.git
     name: uvdar_core
-    rev: d6c7edb3a36909cdbc87b45231b6f8360302936e
+    rev: master
     type: git
     sparse_paths:
       -
@@ -35,7 +35,7 @@ sources:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
     name: uvdar_gazebo_plugin
-    rev: a1546bf67d5c075844e81173518e058cd48185d3
+    rev: master
     type: git
     sparse_paths:
       -
@@ -69,7 +69,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/mrs_serial.git
     name: mrs_serial
-    rev: e9fda0dad73f18dfc9d91ccaba24ce924c52f008
+    rev: b3b1cf8d392b32c6fe05dd9c6609738e4cfe4294
     type: git
     sparse_paths:
       -
@@ -91,7 +91,7 @@ sources_locked:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_core.git
     name: uvdar_core
-    rev: d6c7edb3a36909cdbc87b45231b6f8360302936e
+    rev: 63a984bfb48798a6f8fb09bd5a3df322467085e3
     type: git
     sparse_paths:
       -
@@ -124,7 +124,7 @@ sources_locked:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/trajectory_loader.git
     name: trajectory_loader
-    rev: c45c2d890dd4612a8c7602ab39db75835c9cf76a
+    rev: 719b1600f56e2d2d8cf0290c5ec03a0f56d6bd7c
     type: git
     sparse_paths:
       -
