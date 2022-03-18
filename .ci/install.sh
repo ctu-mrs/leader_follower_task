@@ -21,8 +21,6 @@ echo "clone simulation"
 cd
 git clone https://github.com/ctu-mrs/simulation.git
 cd simulation
-echo "rollback to commit with stable UVDAR"
-git reset --hard 756dfa0e60eef0e92486496e8615d9801c8690b7
 echo "running the main install.sh"
 ./installation/install.sh
 
