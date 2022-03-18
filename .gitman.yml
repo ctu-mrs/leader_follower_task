@@ -69,7 +69,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/mrs_serial.git
     name: mrs_serial
-    rev: b3b1cf8d392b32c6fe05dd9c6609738e4cfe4294
+    rev: 60d3c3d1afff4c94c4304f4433a9bca1e58dfc0b
     type: git
     sparse_paths:
       -
