@@ -157,6 +157,18 @@ sources_locked:
         target: ros_packages/trajectory_loader
     scripts:
       - git submodule update --init --recursive
+  - repo: https://github.com/ctu-mrs/mrs_utils.git
+    name: mrs_utils
+    rev: af2c51f93e029b852637da6c0582beede87b12a5
+    type: git
+    params:
+    sparse_paths:
+      -
+    links:
+      - source: ''
+        target: ros_packages/mrs_utils
+    scripts:
+      - git submodule update --init --recursive
 default_group: ''
 groups:
   -
