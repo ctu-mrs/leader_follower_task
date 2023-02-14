@@ -99,7 +99,7 @@ sources_locked:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: eada51534279ecc5c5d72ac93341fea56f57401f
+    rev: 7f7e08ea251116846bdec14beb4b68d3d6ba9e30
     type: git
     params:
     sparse_paths:
