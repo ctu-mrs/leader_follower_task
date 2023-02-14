@@ -1,5 +1,17 @@
 location: .gitman
 sources:
+  - repo: https://github.com/ctu-mrs/mrs_utils.git
+    name: mrs_utils
+    rev: master
+    type: git
+    params:
+    sparse_paths:
+      -
+    links:
+      - source: ''
+        target: ros_packages/mrs_utils
+    scripts:
+      - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/mrs_serial.git
     name: mrs_serial
     rev: master
@@ -111,7 +123,7 @@ sources_locked:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
     name: uvdar_gazebo_plugin
-    rev: 7ae326df6cd6c8856336ad71b62eeb1af1dd471d
+    rev: b52c37b01bcc9ea8956dcc1ee505cdefebdadeb1
     type: git
     params:
     sparse_paths:
