@@ -1,29 +1,5 @@
 location: .gitman
 sources:
-  - repo: https://github.com/ctu-mrs/mrs_utils.git
-    name: mrs_utils
-    rev: master
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/mrs_utils
-    scripts:
-      - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/mrs_serial.git
-    name: mrs_serial
-    rev: master
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/mrs_serial
-    scripts:
-      - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
     rev: master
@@ -72,8 +48,8 @@ sources:
         target: ros_packages/summer_school_supervisor
     scripts:
       - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/trajectory_loader.git
-    name: trajectory_loader
+  - repo: https://github.com/ctu-mrs/mrs_uav_general.git
+    name: mrs_uav_general
     rev: master
     type: git
     params:
@@ -81,22 +57,11 @@ sources:
       -
     links:
       - source: ''
-        target: ros_packages/trajectory_loader
+        target: ros_packages/mrs_uav_general
     scripts:
       - git submodule update --init --recursive
+
 sources_locked:
-  - repo: https://github.com/ctu-mrs/mrs_serial.git
-    name: mrs_serial
-    rev: 60d3c3d1afff4c94c4304f4433a9bca1e58dfc0b
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/mrs_serial
-    scripts:
-      - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
     rev: 7f7e08ea251116846bdec14beb4b68d3d6ba9e30
@@ -143,30 +108,6 @@ sources_locked:
     links:
       - source: ''
         target: ros_packages/summer_school_supervisor
-    scripts:
-      - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/trajectory_loader.git
-    name: trajectory_loader
-    rev: 719b1600f56e2d2d8cf0290c5ec03a0f56d6bd7c
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/trajectory_loader
-    scripts:
-      - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/mrs_utils.git
-    name: mrs_utils
-    rev: af2c51f93e029b852637da6c0582beede87b12a5
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/mrs_utils
     scripts:
       - git submodule update --init --recursive
 default_group: ''
