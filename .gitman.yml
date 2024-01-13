@@ -48,18 +48,6 @@ sources:
         target: ros_packages/summer_school_supervisor
     scripts:
       - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/mrs_uav_general.git
-    name: mrs_uav_general
-    rev: master
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/mrs_uav_general
-    scripts:
-      - git submodule update --init --recursive
 
 sources_locked:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
