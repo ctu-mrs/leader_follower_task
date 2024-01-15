@@ -16,7 +16,7 @@
 In this task, we will explore a state-of-the-art system for coordinated motion of multiple robots without direct communication. The system consists of two parts - blinking UV markers, which are fitted to each robot, and onboard cameras capable of UV-only sensing. Using this unique approach, the robots are capable of determining the relative position of their neighbors without the need to exchange any information via a communication link. This allows the UAVs to operate in environments with dense electromagnetic interference or coordinate motion of multiple robots with mutually incompatible localization systems (e.g. GPS and SLAM).
 
 ## Installation
-1) The installation requires the open-source [MRS system](https://github.com/ctu-mrs/mrs_uav_system), or if you prefer to install it separately, you will need the [uav_core](https://github.com/ctu-mrs/uav_core) and [simulation](https://github.com/ctu-mrs/simulation) repositories.
+1) The installation requires the open-source [MRS UAV System](https://github.com/ctu-mrs/mrs_uav_system). Please follow the installation [instructions](https://github.com/ctu-mrs/mrs_uav_system#installation) and install the stable full version. The full version also includes a Gazebo simulation environment which you will use.
 
 2) After installing the system, clone this repository and its submodules:
 ```bash
@@ -24,19 +24,24 @@ cd ~/git
 git clone https://github.com/ctu-mrs/leader_follower_task.git
 cd leader_follower_task
 gitman install
-````
+```
 
-3) Link the content of leader_follower_task/ros_packages into your catkin workspace, e.g.:
+3) [FOR NATIVE ROS INSTALLATION]: Setup a local catkin workspace (e.g. in a folder named `workspace` in your home)
 ```bash
-cd ~/workspace/src
+cd ~/
+mkdir -p workspace/src
+cd workspace/src
 ln -sf ~/git/leader_follower_task/ros_packages/* .
-````
+cd ~/workspace
+catkin init
+catkin config --extend /opt/ros/noetic
+```
 
 4) Build the catkin workspace
 ```bash
 cd ~/workspace
 catkin build
-````
+```
 
 ## Task overview
 
@@ -89,7 +94,7 @@ You may notice, that your terminal opened multiple tabs. Consult the first page 
 
 ### How to close the simulation
 * Do not close the terminal window, the processes may remain running in the background.
-* Use the following key shorcut: press `ctrl + a`, then release and then press `k`. This will close all the terminal tabs, which have been opened by the simulator
+* Use the following key shorcut: press `ctrl + a`, then release and then press `k`. A popup window will ask you to confirm. Navigate to it and press `Enter` or hit `9` to confirm. This will close all the terminal tabs, which have been opened by the simulator
 * We strongly recommend using the key shortcut to kill every simulation, to prevent zombie processes ruining your future simulations.
 
 ## Implementation tips
@@ -113,7 +118,7 @@ There are a few steps that may help you. It is not necessary to follow them. You
 
 ## Things to avoid
 
-* Collisions (wow!) - When using the ReferencePoint or ReferenceTrajectory control, the UAVs will automatically avoid collisions. The avoidance is done by moving the follower into a higher altitude. This mechanism will be triggered once the distance between the vehicles is less than 3 m. During this time, all of your commands will be overriden. Triggering the collision avoidance will not result in a score penalty, however, the leader may evade you in the meantime. If you are using the SpeedCommand for control and get within 3 m of the leader, the follower fill fallback to the MPC control and perform the avoidance manoeuver as well.
+* Collisions - When using the ReferencePoint or ReferenceTrajectory control, the UAVs will automatically avoid collisions. The avoidance is done by moving the follower into a higher altitude. This mechanism will be triggered once the distance between the vehicles is less than 3 m. During this time, all of your commands will be overriden. Triggering the collision avoidance will not result in a score penalty, however, the leader may evade you in the meantime. If you are using the SpeedCommand for control and get within 3 m of the leader, the follower fill fallback to the MPC control and perform the avoidance manoeuver as well.
 * Height changes. The leader will always fly at a height of 3 m. Control commands with height below 2 m and above 4 m will be discarded by the follower.
 * Erratic position changes. Position reference, which is over 15 m apart from the current UAV position will be discarded.
 * Pushing physical limits of the UAV. Velocity command larger than 5 m/s will be discarded.
