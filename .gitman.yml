@@ -27,7 +27,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: 2bae9ebc19ff09a937b07451bf9397119dc486c7
+    rev: 67418a881b4b744618a468841df7a7c75bf094a4
     type: git
     params:
     sparse_paths:
@@ -39,7 +39,7 @@ sources_locked:
       - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/summer_school_supervisor.git
     name: summer_school_supervisor
-    rev: f5fe0ad902911d238c48f8c997b7dae483196944
+    rev: 3f3b7cf8526c796d736ae02b5fb74639ecd7d148
     type: git
     params:
     sparse_paths:
