@@ -2,7 +2,7 @@ location: .gitman
 sources:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: master
+    rev: system_1.5
     type: git
     params:
     sparse_paths:
@@ -12,33 +12,9 @@ sources:
         target: ros_packages/uvdar_leader_follower
     scripts:
       - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/uvdar_core.git
-    name: uvdar_core
-    rev: master
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/uvdar_core
-    scripts:
-      - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
-    name: uvdar_gazebo_plugin
-    rev: master
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/uvdar_gazebo_plugin
-    scripts:
-      - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/summer_school_supervisor.git
     name: summer_school_supervisor
-    rev: master
+    rev: system_1.5
     type: git
     params:
     sparse_paths:
@@ -51,7 +27,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: d3220d8896dfbcae77b617081810cc5356a5d15b
+    rev: 2bae9ebc19ff09a937b07451bf9397119dc486c7
     type: git
     params:
     sparse_paths:
@@ -61,33 +37,9 @@ sources_locked:
         target: ros_packages/uvdar_leader_follower
     scripts:
       - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/uvdar_core.git
-    name: uvdar_core
-    rev: 8cfc1b252256280f55af2ac8709198a094881162
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/uvdar_core
-    scripts:
-      - git submodule update --init --recursive
-  - repo: https://github.com/ctu-mrs/uvdar_gazebo_plugin.git
-    name: uvdar_gazebo_plugin
-    rev: 9af88cae229b85e98dfbb87289186df3072310f0
-    type: git
-    params:
-    sparse_paths:
-      -
-    links:
-      - source: ''
-        target: ros_packages/uvdar_gazebo_plugin
-    scripts:
-      - git submodule update --init --recursive
   - repo: https://github.com/ctu-mrs/summer_school_supervisor.git
     name: summer_school_supervisor
-    rev: 98c9528593fa34f3afa076b9afc0dab4f9842363
+    rev: f5fe0ad902911d238c48f8c997b7dae483196944
     type: git
     params:
     sparse_paths:
