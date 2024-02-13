@@ -16,9 +16,15 @@
 In this task, we will explore a state-of-the-art system for coordinated motion of multiple robots without direct communication. The system consists of two parts - blinking UV markers, which are fitted to each robot, and onboard cameras capable of UV-only sensing. Using this unique approach, the robots are capable of determining the relative position of their neighbors without the need to exchange any information via a communication link. This allows the UAVs to operate in environments with dense electromagnetic interference or coordinate motion of multiple robots with mutually incompatible localization systems (e.g. GPS and SLAM).
 
 ## Installation
-1) The installation requires the open-source [MRS UAV System](https://github.com/ctu-mrs/mrs_uav_system). Please follow the installation [instructions](https://github.com/ctu-mrs/mrs_uav_system#installation) and install the stable full version. The full version also includes a Gazebo simulation environment which you will use.
+1) The installation requires the open-source [MRS UAV System](https://github.com/ctu-mrs/mrs_uav_system). Please follow the installation [instructions](https://github.com/ctu-mrs/mrs_uav_system?tab=readme-ov-file#installation) and install the stable full version. The full version also includes a Gazebo simulation environment which you will use. We highly recommend the native installation.
 
-2) After installing the system, clone this repository and its submodules:
+2) Install [uvdar_core](https://github.com/ctu-mrs/uvdar_core/tree/release) and [uvdar_gazebo_plugin](https://github.com/ctu-mrs/uvdar_gazebo_plugin/tree/release). With the native installation, it can be added from ppa:
+```bash
+sudo apt install ros-noetic-uvdar-core ros-noetic-uvdar-gazebo-plugin
+```
+otherwise the repos can be cloned and built in a catkin workspace.
+
+3) After installing the system, clone this repository and its submodules:
 ```bash
 cd ~/git
 git clone https://github.com/ctu-mrs/leader_follower_task.git
@@ -26,7 +32,7 @@ cd leader_follower_task
 gitman install
 ```
 
-3) [FOR NATIVE ROS INSTALLATION]: Setup a local catkin workspace (e.g. in a folder named `workspace` in your home)
+4) [FOR NATIVE ROS INSTALLATION]: Setup a local catkin workspace (e.g. in a folder named `workspace` in your home)
 ```bash
 cd ~/
 mkdir -p workspace/src
@@ -37,7 +43,7 @@ catkin init
 catkin config --extend /opt/ros/noetic
 ```
 
-4) Build the catkin workspace
+5) Build the catkin workspace
 ```bash
 cd ~/workspace
 catkin build
