@@ -27,7 +27,7 @@ sources:
 sources_locked:
   - repo: https://github.com/ctu-mrs/uvdar_leader_follower.git
     name: uvdar_leader_follower
-    rev: 67418a881b4b744618a468841df7a7c75bf094a4
+    rev: 031c2f4854742b86db3658384f8a20162cc54399
     type: git
     params:
     sparse_paths:
