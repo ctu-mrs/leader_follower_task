@@ -1,0 +1,6 @@
+<launch>
+  <arg name="name" default="default" />
+  <group>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find leader_follower_task)/rviz/$(arg name).rviz" />
+  </group>
+</launch>
