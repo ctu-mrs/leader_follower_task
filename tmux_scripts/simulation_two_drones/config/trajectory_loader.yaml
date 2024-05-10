@@ -1,0 +1,7 @@
+trajectory:
+
+  dynamic_uav_name: false
+  # Options specified here will override the common options above.
+  uavs:
+    uav1:
+      filename: "leader_1.0ms.txt"

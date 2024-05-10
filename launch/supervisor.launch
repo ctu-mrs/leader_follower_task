@@ -1,0 +1,39 @@
+<launch>
+
+  <arg name="leader_uav" default="uav1" />
+  <arg name="follower_uav" default="uav2" />
+
+  <arg name="debug" default="false" />
+
+  <arg     if="$(arg debug)" name="launch_prefix" value="debug_roslaunch" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+
+  <group ns="$(arg follower_uav)">
+
+    <node name="supervisor" pkg="leader_follower_task" type="supervisor" output="screen" launch-prefix="$(arg launch_prefix)">
+
+      <rosparam file="$(find leader_follower_task)/config/follower.yaml" command="load" />
+
+      <remap from="~left_blinkers_in" to="uvdar/blinkers_seen_left" />
+      <remap from="~right_blinkers_in" to="uvdar/blinkers_seen_right" />
+      <remap from="~odometry_in" to="estimation_manager/odom_main" />
+      <remap from="~position_cmd_in" to="control_manager/tracker_cmd" />
+      <remap from="~uvdar_in" to="uvdar/filteredPoses" />
+
+      <remap from="~start_score_counting_in" to="~start_score_counting" />
+      <remap from="~score_out" to="~score" />
+
+      <remap from="~reference_point_out" to="control_manager/reference" />
+      <remap from="~reference_trajectory_out" to="control_manager/trajectory_reference" />
+      <remap from="~speed_tracker_command_out" to="control_manager/speed_tracker/command" />
+      <remap from="~switch_tracker_srv_out" to="control_manager/switch_tracker" />
+      <remap from="~leader_raw_pos_out" to="debug/leader_pos/raw" />
+      <remap from="~leader_estim_pos_out" to="debug/leader_pos/filtered" />
+
+      <remap from="~leader_odometry_in" to="/$(arg leader_uav)/estimation_manager/odom_main" />
+
+    </node>
+
+  </group>
+
+</launch>
