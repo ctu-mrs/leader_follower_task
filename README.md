@@ -8,7 +8,7 @@
 
 # Leader-Follower task 
 
-| Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/ros_build_test.yaml/badge.svg?branch=master)](https://github.com/ctu-mrs/leader_follower_task/actions) |
+| Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/workflows/ros_build_test.yml/badge.svg)](https://github.com/ctu-mrs/leader_follower_task/actions) |
 | --- | --- |
 
 ## Leader-follower operation without communication
