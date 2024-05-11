@@ -385,23 +385,6 @@ Visualization Manager:
               Name: PostprocessedTrajectory
           Enabled: true
           Name: MpcTracker
-        - Alpha: 0.10000000149011612
-          Class: mrs_rviz_plugins/Bumper
-          Collision alpha: 0.5
-          Collision color: 255; 0; 0
-          Color: 204; 51; 204
-          Colorize collisions: true
-          Display mode: sensor types
-          Enabled: true
-          History Length: 1
-          Horizontal collision threshold: 1
-          Name: Bumper
-          Show sectors with no data: false
-          Show undetected obstacles: true
-          Topic: /uav1/bumper/obstacle_sectors
-          Unreliable: false
-          Value: true
-          Vertical collision threshold: 1
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -732,23 +715,6 @@ Visualization Manager:
               Name: PostprocessedTrajectory
           Enabled: true
           Name: MpcTracker
-        - Alpha: 0.10000000149011612
-          Class: mrs_rviz_plugins/Bumper
-          Collision alpha: 0.5
-          Collision color: 255; 0; 0
-          Color: 204; 51; 204
-          Colorize collisions: true
-          Display mode: sensor types
-          Enabled: true
-          History Length: 1
-          Horizontal collision threshold: 1
-          Name: Bumper
-          Show sectors with no data: false
-          Show undetected obstacles: true
-          Topic: /uav2/bumper/obstacle_sectors
-          Unreliable: false
-          Value: true
-          Vertical collision threshold: 1
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
