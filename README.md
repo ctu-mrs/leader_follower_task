@@ -126,3 +126,47 @@ There are a few steps that may help you. It is not necessary to follow them. You
 * Erratic position changes. Position reference, which is over 15 m apart from the current UAV position will be discarded.
 * Pushing physical limits of the UAV. Velocity command larger than 5 m/s will be discarded.
 * Violating these restrictions 10 times in a row will result in challenge termination.
+
+## References
+<details>
+  <summary>Walter V., Staub N., Franchi A., and Saska M., "UVDAR System for Visual Relative Localization With Application to Leader–Follower Formations of Multirotor UAVs", IEEE Robotics and Automation Letters 4(3):2637-2644, July 2019.</summary>
+
+```
+@article{uvdar_dirfol,
+	author = "V. {Walter} and N. {Staub} and A. {Franchi} and M. {Saska}",
+	journal = "IEEE Robotics and Automation Letters",
+	title = "UVDAR System for Visual Relative Localization With Application to Leader–Follower Formations of Multirotor UAVs",
+	year = 2019,
+	volume = 4,
+	number = 3,
+	pages = "2637-2644",
+	doi = "10.1109/LRA.2019.2901683",
+	issn = "2377-3766",
+	month = "July",
+	pdf = "data/papers/walterRAL2019.pdf"
+}
+```
+</details>
+
+<details>
+  <summary>Baca, T., Petrlik, M., Vrba, M., Spurny, V., Penicka, R., Hert, D., and Saska, M., "The MRS UAV System: Pushing the Frontiers of Reproducible Research, Real-world Deployment, and Education with Autonomous Unmanned Aerial Vehicles", Journal of Intelligent & Robotic Systems 102, 26 (2021).</summary>
+
+```
+@article{baca2021mrs,
+	author = "Baca, Tomas and Petrlik, Matej and Vrba, Matous and Spurny, Vojtech and Penicka, Robert and Hert, Daniel and Saska, Martin",
+	doi = "10.1007/s10846-021-01383-5",
+	issue = 1,
+	journal = "Journal of Intelligent {\&} Robotic Systems",
+	month = "May",
+	number = 26,
+	pages = "1--28",
+	pdf = "https://arxiv.org/pdf/2008.08050",
+	publisher = "Springer",
+	title = "{The MRS UAV System: Pushing the Frontiers of Reproducible Research, Real-world Deployment, and Education with Autonomous Unmanned Aerial Vehicles}",
+	type = "article",
+	url = "https://link.springer.com/article/10.1007/s10846-021-01383-5",
+	volume = 102,
+	year = 2021
+}
+```
+</details>
