@@ -78,18 +78,17 @@ mrs_msgs::TrajectoryReference buildMpcTrajectoryReference(std::vector<Eigen::Vec
   return traj;
 }
 
-mrs_msgs::SpeedTrackerCommand buildSpeedTrackerCommand(Eigen::Vector3d velocity, double heading, double height, std::string frame) {
-  mrs_msgs::SpeedTrackerCommand cmd;
-  cmd.header.frame_id = frame;
-  cmd.header.stamp    = ros::Time::now();
-  cmd.velocity.x      = velocity.x();
-  cmd.velocity.y      = velocity.y();
-  cmd.velocity.z      = 0.0;   // let the height controller maintain the vertical velocity
-  cmd.use_velocity    = true;  // maintain the desired velocity
-  cmd.z               = height;
-  cmd.use_z           = true;  // maintain a constant height
-  cmd.heading         = heading;
-  cmd.use_heading     = true;
+mrs_msgs::VelocityReferenceStamped buildVelocityReferenceCommand(Eigen::Vector3d velocity, double heading, double height, std::string frame) {
+  mrs_msgs::VelocityReferenceStamped cmd;
+  cmd.header.frame_id        = frame;
+  cmd.header.stamp           = ros::Time::now();
+  cmd.reference.velocity.x   = velocity.x();
+  cmd.reference.velocity.y   = velocity.y();
+  cmd.reference.velocity.z   = 0.0;  // let the height controller maintain the vertical velocity
+  cmd.reference.use_altitude = true;
+  cmd.reference.altitude     = height;
+  cmd.reference.heading      = heading;
+  cmd.reference.use_heading  = true;
   return cmd;
 }
 

@@ -11,8 +11,8 @@
 #include <mrs_lib/param_loader.h>
 
 #include <mrs_msgs/ReferenceStamped.h>
-#include <mrs_msgs/SpeedTrackerCommand.h>
 #include <mrs_msgs/TrackerCommand.h>
+#include <mrs_msgs/VelocityReferenceStamped.h>
 #include <mrs_msgs/String.h>
 #include <mrs_msgs/PoseWithCovarianceArrayStamped.h>
 
@@ -26,11 +26,11 @@
 #define MAX_COMMAND_HEIGHT 4.0               // [m]
 #define MAX_COMMAND_DISTANCE_THRESHOLD 15.0  // [m]
 #define MAX_VELOCITY_MAGNITUDE 5.0           // [m/s]
+#define MAX_SEPARATION_THRESHOLD 15.0        // [m]
 
-bool initialized         = false;
-bool using_speed_tracker = false;
-bool contact_broken      = false;
-bool counting_score      = false;
+bool initialized    = false;
+bool contact_broken = false;
+bool counting_score = false;
 
 double visual_contact_timeout  = 1.7;   // [s]
 double command_timeout         = 1.0;   // [s]
@@ -60,51 +60,16 @@ ros::Publisher leader_estim_pos_publisher;
 
 ros::Timer score_timer, control_action_timer;
 
-ros::ServiceClient switch_tracker_client;
 ros::ServiceServer start_score_counting_server;
 ros::Publisher     mpc_reference_publisher;
 ros::Publisher     mpc_trajectory_publisher;
-ros::Publisher     speed_tracker_command_publisher;
+ros::Publisher     mpc_velocity_reference_publisher;
 
 Eigen::Vector3d follower_pos_odom;
 Eigen::Vector3d follower_pos_cmd;
 
 FollowerController fc;
 std::string        uav_frame;
-
-/* switchToSpeedTracker //{ */
-void switchToSpeedTracker() {
-  if (using_speed_tracker) {
-    return;
-  }
-  mrs_msgs::String msg;
-  msg.request.value = "SpeedTracker";
-  switch_tracker_client.call(msg.request, msg.response);
-  if (!msg.response.success) {
-    ROS_WARN("[%s]: %s", ros::this_node::getName().c_str(), msg.response.message.c_str());
-  } else {
-    ROS_INFO("[%s]: Switched to SpeedTracker", ros::this_node::getName().c_str());
-    using_speed_tracker = true;
-  }
-}
-//}
-
-/* switchToMpcTracker //{ */
-void switchToMpcTracker() {
-  if (!using_speed_tracker) {
-    return;
-  }
-  mrs_msgs::String msg;
-  msg.request.value = "MpcTracker";
-  switch_tracker_client.call(msg.request, msg.response);
-  if (!msg.response.success) {
-    ROS_WARN("[%s]: %s", ros::this_node::getName().c_str(), msg.response.message.c_str());
-  } else {
-    ROS_INFO("[%s]: Switched to MPC tracker", ros::this_node::getName().c_str());
-    using_speed_tracker = false;
-  }
-}
-//}
 
 /* publishLeaderRawPos //{ */
 void publishLeaderRawPos() {
@@ -170,40 +135,29 @@ void controlAction(const ros::TimerEvent /* &event */) {
   publishLeaderRawPos();
   publishLeaderFilteredPos();
 
-  // call student's createSpeedCommand
-  auto speed_command_request = fc.createSpeedCommand();
-  auto speed_command         = buildSpeedTrackerCommand(speed_command_request.velocity, speed_command_request.heading, speed_command_request.height, uav_frame);
-  speed_tracker_command_publisher.publish(speed_command);
+  // call student's createVelocityReference
+  auto velocity_reference_request = fc.createVelocityReference();
 
-  if (sqrt(pow(follower_pos_odom.x() - leader_raw_pos_odom.x(), 2) + pow(follower_pos_odom.y() - leader_raw_pos_odom.y(), 2)) > 15.0) {
+  if (sqrt(pow(follower_pos_odom.x() - leader_raw_pos_odom.x(), 2) + pow(follower_pos_odom.y() - leader_raw_pos_odom.y(), 2)) > MAX_SEPARATION_THRESHOLD) {
     ROS_WARN("[%s]: UAVs separation limit exceeded!", ros::this_node::getName().c_str());
     erroneous_commands_count++;
     return;
   }
 
-  if (speed_command_request.use_for_control) {
+  if (velocity_reference_request.use_for_control) {
 
-    /* speed command sanity checks //{ */
-
-    double uav_separation = (leader_raw_pos_odom - follower_pos_odom).norm();
-    if (uav_separation < 3.0) {
-      ROS_WARN("[%s]: UAVs are too close together! SpeedTracker cannot be used for control!", ros::this_node::getName().c_str());
-      erroneous_commands_count++;
-      switchToMpcTracker();
-      return;
-    }
-
-    if (speed_command_request.height < MIN_COMMAND_HEIGHT) {
+    /* velocity reference sanity checks //{ */
+    if (velocity_reference_request.height < MIN_COMMAND_HEIGHT) {
       ROS_WARN("[%s]: Reference point set too low! The command will be discarded", ros::this_node::getName().c_str());
       erroneous_commands_count++;
       return;
     }
-    if (speed_command_request.height > MAX_COMMAND_HEIGHT) {
+    if (velocity_reference_request.height > MAX_COMMAND_HEIGHT) {
       ROS_WARN("[%s]: Reference point set too high! The command will be discarded", ros::this_node::getName().c_str());
       erroneous_commands_count++;
       return;
     }
-    if (speed_command_request.velocity.norm() > MAX_VELOCITY_MAGNITUDE) {
+    if (velocity_reference_request.velocity.norm() > MAX_VELOCITY_MAGNITUDE) {
       ROS_WARN("[%s]: Requested velocity is too high! The command will be discarded", ros::this_node::getName().c_str());
       erroneous_commands_count++;
       return;
@@ -212,10 +166,11 @@ void controlAction(const ros::TimerEvent /* &event */) {
 
     erroneous_commands_count = 0;
 
-    switchToSpeedTracker();
-    last_command_time = speed_command.header.stamp;
+    auto velocity_reference_command =
+        buildVelocityReferenceCommand(velocity_reference_request.velocity, velocity_reference_request.heading, velocity_reference_request.height, uav_frame);
+    mpc_velocity_reference_publisher.publish(velocity_reference_command);
+    last_command_time = velocity_reference_command.header.stamp;
   } else {
-    switchToMpcTracker();
 
     // call student's createReferenceTrajectory
     auto reference_trajectory_request = fc.createReferenceTrajectory();
@@ -387,12 +342,11 @@ int main(int argc, char** argv) {
   right_blinkers_subscriber  = nh.subscribe("right_blinkers_in", 10, &rightBlinkersCallback);
   leader_odometry_subscriber = nh.subscribe("leader_odometry_in", 10, &leaderOdometryCallback);
 
-  score_publisher                 = nh.advertise<std_msgs::Int64>("score_out", 1);
-  mpc_reference_publisher         = nh.advertise<mrs_msgs::ReferenceStamped>("reference_point_out", 1);
-  mpc_trajectory_publisher        = nh.advertise<mrs_msgs::TrajectoryReference>("reference_trajectory_out", 1);
-  speed_tracker_command_publisher = nh.advertise<mrs_msgs::SpeedTrackerCommand>("speed_tracker_command_out", 1);
-  switch_tracker_client           = nh.serviceClient<mrs_msgs::String>("switch_tracker_srv_out");
-  start_score_counting_server     = nh.advertiseService("start_score_counting_in", &startScoreCountingCallback);
+  score_publisher                  = nh.advertise<std_msgs::Int64>("score_out", 1);
+  mpc_reference_publisher          = nh.advertise<mrs_msgs::ReferenceStamped>("reference_point_out", 1);
+  mpc_trajectory_publisher         = nh.advertise<mrs_msgs::TrajectoryReference>("reference_trajectory_out", 1);
+  mpc_velocity_reference_publisher = nh.advertise<mrs_msgs::VelocityReferenceStamped>("reference_velocity_out", 1);
+  start_score_counting_server      = nh.advertiseService("start_score_counting_in", &startScoreCountingCallback);
 
   leader_raw_pos_publisher   = nh.advertise<nav_msgs::Odometry>("leader_raw_pos_out", 1);
   leader_estim_pos_publisher = nh.advertise<nav_msgs::Odometry>("leader_estim_pos_out", 1);
@@ -435,7 +389,6 @@ int main(int argc, char** argv) {
 
   control_action_timer.stop();
   score_timer.stop();
-  switchToMpcTracker();
   ROS_INFO("[%s]: Final score: %d", ros::this_node::getName().c_str(), score);
 
   return 0;

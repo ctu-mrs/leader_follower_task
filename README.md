@@ -6,7 +6,7 @@
 <!-- output: pdf_document -->
 <!-- --- -->
 
-# Leader-Follower task 
+# Leader-Follower task
 | Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/actions/workflows/ros_build_test.yaml/badge.svg?branch=master)](https://github.com/ctu-mrs/leader_follower_task/actions) |
 | ---          | ---                                                                                                                                                                                       |
 
@@ -64,7 +64,7 @@ Your entry point to the system is the [`src/follower.cpp`](https://github.com/ct
 * receiveUvdar - called every time a new UVDAR message is received. This will provide you the estimate of position of the leader UAV, based on the markers visible by the onboard cameras.
 * createReferencePoint - called periodically by the supervisor node. You are expected to provide the onboard controller a new reference point through this method.
 * createReferenceTrajectory - called periodically by the supervisor node. You are expected to provide the onboard controller a series of reference points through this method.
-* createSpeedCommand - called periodically by the supervisor node. Alternative to the reference point commands. Allows you to have a deeper level of control by using velocity commands instead of position reference.
+* createVelocityReference - called periodically by the supervisor node. Alternative to the reference point commands. Allows swarm-like control by using velocity commands instead of position references.
 * getCurrentEstimate - uses a simple Kalman filter to estimate the position and velocity of the leader UAV. Filtering the raw UVDAR data will allow you to smooth out the control commands. Aggressive manoeuvres generate tilt, which may result in loss of visual contact with the leader.
 
 These methods are periodically called by the [`supervisor`](https://github.com/ctu-mrs/leader_follower_task/src/supervisor.cpp). This is a ROS node running onboard the follower UAV. **Do not modify the supervisor node! Your supervisor node will not be used for evaluation!**
@@ -114,14 +114,14 @@ There are a few steps that may help you. It is not necessary to follow them. You
   * Experiment with the desired offset. You may get better results just by adjusting the distance between the leader and the follower. You can use the [config/follower.yaml](https://github.com/ctu-mrs/leader_follower_task/blob/master/config/follower.yaml) if you want to change the settings without the need for compilation. (You will still need to restart the node.)
   * Experiment with the control action rate, also adjustable in the config file.
   * Estimate the leader's velocity. An estimator based on the Kalman filter is already provided in the code, but in the default solution it is unused. Filter parameters may be loaded from the config file as well.
-  * You can give the follower three types of control commands: ReferencePoint (this is done in the default solution), ReferenceTrajectory and SpeedCommand. Inside each command, there is a boolean variable called `use_for_control`. If you set this value to `true`, the supervisor node will attempt to use this command for control.
-  * If multiple commands are available at the same time, only the highest ranking command in the following hierarchy will be used: SpeedCommand > ReferenceTrajectory > ReferencePoint.
+  * You can give the follower three types of control commands: ReferencePoint (this is done in the default solution), ReferenceTrajectory and VelocityReference. Inside each command, there is a boolean variable called `use_for_control`. If you set this value to `true`, the supervisor node will attempt to use this command for control.
+  * If multiple commands are available at the same time, only the highest ranking command in the following hierarchy will be used: VelocityReference > ReferenceTrajectory > ReferencePoint.
   * In computer vision, distance to an object tends to be more difficult to estimate than its bearing. Therefore, the position tracking works much better if the line of sight from camera is directly perpendicular to the direction of leader's motion. If the leader moves along the line of sight from the camera, retrieving the position becomes much more difficult.
   * You are not required to perfectly copy the leader's trajectory. You only have to track the leader for as long as possible.
 
 ## Things to avoid
 
-* Collisions... When using the ReferencePoint or ReferenceTrajectory control, the UAVs will automatically avoid collisions. The avoidance is done by moving the follower into a higher altitude. This mechanism will be triggered once the distance between the vehicles is less than 3 m. During this time, all of your commands will be overriden. Triggering the collision avoidance will not result in a score penalty, however, the leader may evade you in the meantime. If you are using the SpeedCommand for control and get within 3 m of the leader, the follower fill fallback to the MPC control and perform the avoidance manoeuver as well.
+* Planned collisions. The UAVs are configured to automatically avoid collisions. The avoidance is done by moving the follower into a higher altitude. This mechanism will be triggered once the distance between the vehicles is less than 3 m. During this time, all of your commands will be ignored. Triggering the collision avoidance will not result in a direct score penalty, however, the leader may evade you in the meantime.
 * Height changes. The leader will always fly at a height of 3 m. Control commands with height below 2 m and above 4 m will be discarded by the follower.
 * Erratic position changes. Position reference, which is over 15 m apart from the current UAV position will be discarded.
 * Pushing physical limits of the UAV. Velocity command larger than 5 m/s will be discarded.
@@ -133,17 +133,17 @@ There are a few steps that may help you. It is not necessary to follow them. You
 
 ```
 @article{uvdar_dirfol,
-	author = "V. {Walter} and N. {Staub} and A. {Franchi} and M. {Saska}",
-	journal = "IEEE Robotics and Automation Letters",
-	title = "UVDAR System for Visual Relative Localization With Application to Leader–Follower Formations of Multirotor UAVs",
-	year = 2019,
-	volume = 4,
-	number = 3,
-	pages = "2637-2644",
-	doi = "10.1109/LRA.2019.2901683",
-	issn = "2377-3766",
-	month = "July",
-	pdf = "data/papers/walterRAL2019.pdf"
+  author = "V. {Walter} and N. {Staub} and A. {Franchi} and M. {Saska}",
+  journal = "IEEE Robotics and Automation Letters",
+  title = "UVDAR System for Visual Relative Localization With Application to Leader–Follower Formations of Multirotor UAVs",
+  year = 2019,
+  volume = 4,
+  number = 3,
+  pages = "2637-2644",
+  doi = "10.1109/LRA.2019.2901683",
+  issn = "2377-3766",
+  month = "July",
+  pdf = "data/papers/walterRAL2019.pdf"
 }
 ```
 </details>
@@ -153,20 +153,20 @@ There are a few steps that may help you. It is not necessary to follow them. You
 
 ```
 @article{baca2021mrs,
-	author = "Baca, Tomas and Petrlik, Matej and Vrba, Matous and Spurny, Vojtech and Penicka, Robert and Hert, Daniel and Saska, Martin",
-	doi = "10.1007/s10846-021-01383-5",
-	issue = 1,
-	journal = "Journal of Intelligent {\&} Robotic Systems",
-	month = "May",
-	number = 26,
-	pages = "1--28",
-	pdf = "https://arxiv.org/pdf/2008.08050",
-	publisher = "Springer",
-	title = "{The MRS UAV System: Pushing the Frontiers of Reproducible Research, Real-world Deployment, and Education with Autonomous Unmanned Aerial Vehicles}",
-	type = "article",
-	url = "https://link.springer.com/article/10.1007/s10846-021-01383-5",
-	volume = 102,
-	year = 2021
+  author = "Baca, Tomas and Petrlik, Matej and Vrba, Matous and Spurny, Vojtech and Penicka, Robert and Hert, Daniel and Saska, Martin",
+  doi = "10.1007/s10846-021-01383-5",
+  issue = 1,
+  journal = "Journal of Intelligent {\&} Robotic Systems",
+  month = "May",
+  number = 26,
+  pages = "1--28",
+  pdf = "https://arxiv.org/pdf/2008.08050",
+  publisher = "Springer",
+  title = "{The MRS UAV System: Pushing the Frontiers of Reproducible Research, Real-world Deployment, and Education with Autonomous Unmanned Aerial Vehicles}",
+  type = "article",
+  url = "https://link.springer.com/article/10.1007/s10846-021-01383-5",
+  volume = 102,
+  year = 2021
 }
 ```
 </details>

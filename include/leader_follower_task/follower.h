@@ -6,7 +6,6 @@
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <mrs_msgs/TrajectoryReference.h>
 #include <mrs_msgs/TrackerCommand.h>
-#include <mrs_msgs/SpeedTrackerCommand.h>
 #include <mrs_msgs/ReferenceStamped.h>
 #include <mrs_msgs/String.h>
 #include <dynamic_reconfigure/server.h>
@@ -33,7 +32,7 @@ struct ReferenceTrajectory
   bool                         use_for_control;
 };
 
-struct SpeedCommand
+struct VelocityReference
 {
   Eigen::Vector3d velocity;
   double          heading;
@@ -52,7 +51,7 @@ public:
 
   ReferencePoint      createReferencePoint();
   ReferenceTrajectory createReferenceTrajectory();
-  SpeedCommand        createSpeedCommand();
+  VelocityReference   createVelocityReference();
 
   leader_follower_task::FollowerConfig initialize(mrs_lib::ParamLoader& param_loader);
 
