@@ -25,8 +25,7 @@
 
       <remap from="~reference_point_out" to="control_manager/reference" />
       <remap from="~reference_trajectory_out" to="control_manager/trajectory_reference" />
-      <remap from="~speed_tracker_command_out" to="control_manager/speed_tracker/command" />
-      <remap from="~switch_tracker_srv_out" to="control_manager/switch_tracker" />
+      <remap from="~reference_velocity_out" to="control_manager/velocity_reference" />
       <remap from="~leader_raw_pos_out" to="debug/leader_pos/raw" />
       <remap from="~leader_estim_pos_out" to="debug/leader_pos/filtered" />
 

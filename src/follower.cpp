@@ -25,8 +25,8 @@ Eigen::Vector3d position_offset          = Eigen::Vector3d(0.0, 0.0, 0.0);
 double          heading_offset           = 0.0;
 double          uvdar_msg_interval       = 0.1;
 bool            use_estimator            = false;
-bool            use_speed_tracker        = false;
 bool            use_trajectory_reference = false;
+bool            use_velocity_reference   = false;
 
 VelocityEstimator estimator;
 Eigen::Vector3d   leader_predicted_position;
@@ -67,7 +67,7 @@ leader_follower_task::FollowerConfig FollowerController::initialize(mrs_lib::Par
   config.heading_offset           = heading_offset;
   config.filter_data              = use_estimator;
   config.use_trajectory_reference = use_trajectory_reference;
-  config.use_speed_tracker        = use_speed_tracker;
+  config.use_velocity_reference   = use_velocity_reference;
   ////
 
   VelocityEstimator::kalman3D::x_t initial_states;
@@ -87,8 +87,8 @@ leader_follower_task::FollowerConfig FollowerController::initialize(mrs_lib::Par
 void FollowerController::dynamicReconfigureCallback(leader_follower_task::FollowerConfig& config, [[maybe_unused]] uint32_t level) {
   position_offset          = Eigen::Vector3d(config.desired_offset_x, config.desired_offset_y, config.desired_offset_z);
   heading_offset           = config.heading_offset;
-  use_speed_tracker        = config.use_speed_tracker;
   use_trajectory_reference = config.use_trajectory_reference;
+  use_velocity_reference   = config.use_velocity_reference;
 
   if (!use_estimator && config.filter_data) {
     ROS_INFO("[%s]: Estimator started", ros::this_node::getName().c_str());
@@ -231,29 +231,29 @@ ReferenceTrajectory FollowerController::createReferenceTrajectory() {
 }
 //}
 
-/* createSpeedCommand //{ */
-SpeedCommand FollowerController::createSpeedCommand() {
-  SpeedCommand command;
+/* createVelocityReference //{ */
+VelocityReference FollowerController::createVelocityReference() {
+  VelocityReference velocity_cmd;
 
   if (!got_odometry || !got_uvdar || !got_tracker_output) {
-    command.velocity        = Eigen::Vector3d(0, 0, 0);
-    command.heading         = 0;
-    command.height          = 0;
-    command.use_for_control = false;
+    velocity_cmd.velocity        = Eigen::Vector3d(0, 0, 0);
+    velocity_cmd.heading         = 0;
+    velocity_cmd.height          = 0;
+    velocity_cmd.use_for_control = false;
   }
 
   if (use_estimator) {
-    command.velocity = leader_predicted_velocity;
-    command.height   = leader_predicted_position.z() + position_offset.z();
-    command.heading  = follower_heading_odometry;
+    velocity_cmd.velocity = leader_predicted_velocity;
+    velocity_cmd.height   = leader_predicted_position.z() + position_offset.z();
+    velocity_cmd.heading  = follower_heading_odometry;
   }
 
-  if (use_speed_tracker) {
-    command.use_for_control = true;
+  if (use_velocity_reference) {
+    velocity_cmd.use_for_control = true;
   } else {
-    command.use_for_control = false;
+    velocity_cmd.use_for_control = false;
   }
-  return command;
+  return velocity_cmd;
 }
 //}
 

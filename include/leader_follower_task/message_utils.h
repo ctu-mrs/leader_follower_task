@@ -5,8 +5,8 @@
 #include <eigen3/Eigen/Core>
 #include <nav_msgs/Odometry.h>
 #include <mrs_msgs/TrajectoryReference.h>
-#include <mrs_msgs/SpeedTrackerCommand.h>
 #include <mrs_msgs/ReferenceStamped.h>
+#include <mrs_msgs/VelocityReferenceStamped.h>
 
 /**
  * @brief Create a reference point message for the MPC tracker
@@ -56,16 +56,16 @@ mrs_msgs::TrajectoryReference buildMpcTrajectoryReference(std::vector<Eigen::Vec
 mrs_msgs::TrajectoryReference buildMpcTrajectoryReference(std::vector<Eigen::Vector3d> position, double sampling_time, std::string frame);
 
 /**
- * @brief Create a command for the SpeedTracker
+ * @brief Create a velocity reference for the MPC tracker
  *
  * @param velocity - desired velocity
  * @param heading - desired heading
  * @param height - desired height to be maintained
  * @param frame - name of the frame of reference
  *
- * @return message to be published into the /control_manager/speed_tracker/command
+ * @return message to be published into the /control_manager/velocity_reference topic
  */
-mrs_msgs::SpeedTrackerCommand buildSpeedTrackerCommand(Eigen::Vector3d velocity, double heading, double height, std::string frame);
+mrs_msgs::VelocityReferenceStamped buildVelocityReferenceCommand(Eigen::Vector3d velocity, double heading, double height, std::string frame);
 
 
 /**

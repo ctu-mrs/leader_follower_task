@@ -2,7 +2,7 @@
 <package format="2">
 
   <name>leader_follower_task</name>
-  <version>1.5.0</version>
+  <version>1.6.0</version>
   <description>TODO</description>
   <maintainer email="stibipet@fel.cvut.cz">Petr Štibinger</maintainer>
   <author>Petr Štibinger</author>
