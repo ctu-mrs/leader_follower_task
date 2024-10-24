@@ -1,5 +1,10 @@
-name: simulation
+# do not modify these
 root: ./
+name: simulation
+socket_name: mrs
+attach: false
+tmux_options: -f /etc/ctu-mrs/tmux.conf
+# you can modify these
 startup_window: goto_start
 pre_window: export RUN_TYPE=simulation; export UAV_TYPE=x500; export PLATFORM_CONFIG=`rospack find mrs_uav_gazebo_simulation`/config/mrs_uav_system/$UAV_TYPE.yaml; export CUSTOM_CONFIG=./config/custom_config.yaml; export WORLD_CONFIG=./config/world_config.yaml; export NETWORK_CONFIG=./config/network_config.yaml; export UV_CALIB_FILE=`rospack find uvdar_gazebo_plugin`/config/calib_results.txt
 # export UAV_NAME=uav1; export RUN_TYPE=simulation; export UAV_TYPE=x500; export WORLD_NAME=simulation; export SENSORS="garmin_down"; export SENSORS="garmin_down"
@@ -15,8 +20,8 @@ windows:
   - spawn:
       layout: tiled
       panes:
-        - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 --$UAV_TYPE --pos_file `pwd`/pos1.yaml --enable-rangefinder --enable-ground-truth --enable-uv-leds signal_id:=[0,1,2,3]"
-        - waitForGazebo; sleep 3; rosservice call /mrs_drone_spawner/spawn "2 --$UAV_TYPE --pos_file `pwd`/pos2.yaml --enable-rangefinder --enable-ground-truth --enable-dual-uv-cameras calib_file:=`rospack find uvdar_core`/config/ocamcalib/calib_results_bf_uv_fe.txt"
+        - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 --$UAV_TYPE --pos-file $(pwd)/pos1.yaml --enable-rangefinder --enable-ground-truth --enable-uv-leds signal_id:=[0,1,2,3]"
+        - waitForGazebo; sleep 3; rosservice call /mrs_drone_spawner/spawn "2 --$UAV_TYPE --pos-file $(pwd)/pos2.yaml --enable-rangefinder --enable-ground-truth --enable-dual-uv-cameras calib_file:=`rospack find uvdar_core`/config/ocamcalib/calib_results_bf_uv_fe.txt"
   - status:
       layout: tiled
       panes:
