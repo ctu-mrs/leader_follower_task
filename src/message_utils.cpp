@@ -1,4 +1,4 @@
-#include <leader_follower_task/message_utils.h>
+#include <leader_follower_task_tutorial/message_utils.h>
 #include <nav_msgs/Odometry.h>
 
 mrs_msgs::ReferenceStamped buildMpcReference(Eigen::Vector3d position, double heading, std::string frame) {

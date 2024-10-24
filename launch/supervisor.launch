@@ -11,11 +11,15 @@
   <group ns="$(arg follower_uav)">
 
     <node name="supervisor" pkg="leader_follower_task" type="supervisor" output="screen" launch-prefix="$(arg launch_prefix)">
+      <!--<node name="supervisor" pkg="leader_follower_task" type="supervisor" output="screen" launch-prefix="debug_roslaunch">-->
 
       <rosparam file="$(find leader_follower_task)/config/follower.yaml" command="load" />
 
       <remap from="~left_blinkers_in" to="uvdar/blinkers_seen_left" />
       <remap from="~right_blinkers_in" to="uvdar/blinkers_seen_right" />
+      <remap from="~back_blinkers_in" to="uvdar/blinkers_seen_back" />
+  
+    
       <remap from="~odometry_in" to="estimation_manager/odom_main" />
       <remap from="~position_cmd_in" to="control_manager/tracker_cmd" />
       <remap from="~uvdar_in" to="uvdar/filteredPoses" />

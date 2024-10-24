@@ -15,7 +15,7 @@
 #include <mrs_lib/attitude_converter.h>
 #include <mrs_lib/param_loader.h>
 
-#include <leader_follower_task/FollowerConfig.h>
+#include <leader_follower_task_tutorial/FollowerConfig.h>
 
 struct ReferencePoint
 {
