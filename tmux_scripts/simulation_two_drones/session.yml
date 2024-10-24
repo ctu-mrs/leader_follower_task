@@ -17,13 +17,13 @@ windows:
       layout: tiled
       panes:
         - waitForRos; roslaunch mrs_uav_gazebo_simulation simulation.launch world_name:=grass_plane gui:=true
-   - spawn:
+  - spawn:
       layout: tiled
       panes:
         - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 --$UAV_TYPE --pos-file $(pwd)/pos1.yaml --enable-rangefinder --enable-ground-truth --enable-uv-leds signal_id:=[0,1,2,3]"
         - waitForGazebo; sleep 10; rosservice call /mrs_drone_spawner/spawn "2 --$UAV_TYPE --pos-file $(pwd)/pos2.yaml --enable-rangefinder --enable-ground-truth --enable-dual-uv-cameras calib_file:=`rospack find uvdar_core`/config/ocamcalib/calib_results_bf_uv_fe.txt --enable-back-uv-camera calib_file:=$(rospack find uvdar_core)/config/ocamcalib/calib_results_bf_uv_fe.txt"
 
- - status:
+  - status:
       layout: tiled
       panes:
         - export UAV_NAME=uav1; waitForHw; roslaunch mrs_uav_status status.launch
