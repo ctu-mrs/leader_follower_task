@@ -25,15 +25,16 @@
 #define MIN_COMMAND_HEIGHT 2.0               // [m]
 #define MAX_COMMAND_HEIGHT 4.0               // [m]
 #define MAX_COMMAND_DISTANCE_THRESHOLD 15.0  // [m]
-#define MAX_VELOCITY_MAGNITUDE 5.0           // [m/s]
+#define MAX_VELOCITY_MAGNITUDE 20.0           // [m/s]
 #define MAX_SEPARATION_THRESHOLD 15.0        // [m]
+
 
 bool initialized    = false;
 bool contact_broken = false;
 bool counting_score = false;
 
-double visual_contact_timeout  = 1.7;   // [s]
-double command_timeout         = 1.0;   // [s]
+double visual_contact_timeout  = 2.5;   // [s]
+double command_timeout         = 2.5;   // [s]
 double score_timer_interval    = 0.01;  // [s]
 double control_action_interval = 0.0;   // [s]
 
@@ -42,6 +43,7 @@ ros::Time last_command_time;
 int       score                    = 0;
 int       left_blinkers            = 0;
 int       right_blinkers           = 0;
+int       back_blinkers            = 0;
 int       erroneous_commands_count = 0;
 
 Eigen::Vector3d leader_raw_pos_uvdar;
@@ -52,6 +54,7 @@ ros::Subscriber position_cmd_subscriber;
 ros::Subscriber uvdar_subscriber;
 ros::Subscriber left_blinkers_subscriber;
 ros::Subscriber right_blinkers_subscriber;
+ros::Subscriber back_blinkers_subscriber;
 ros::Subscriber leader_odometry_subscriber;
 
 ros::Publisher score_publisher;
@@ -80,6 +83,7 @@ void publishLeaderRawPos() {
   leader_raw_pos.pose.pose.position.y = leader_raw_pos_uvdar.y();
   leader_raw_pos.pose.pose.position.z = leader_raw_pos_uvdar.z();
   leader_raw_pos_publisher.publish(leader_raw_pos);
+  
 }
 //}
 
@@ -95,7 +99,7 @@ void publishLeaderFilteredPos() {
 /* scoreTimer //{ */
 void scoreTimer(const ros::TimerEvent /* &event */) {
 
-  if ((left_blinkers + right_blinkers) >= 2) {
+  if ((left_blinkers + right_blinkers + back_blinkers) >= 2) {
     last_contact_time = ros::Time::now();
   }
 
@@ -104,6 +108,7 @@ void scoreTimer(const ros::TimerEvent /* &event */) {
   // check if visual contact is broken
   double visual_dt = now - last_contact_time.toSec();
   if (visual_dt > visual_contact_timeout) {
+    ROS_ERROR("[%s]: Visual contact broken for longer than %.2f sec! Following terminated!", ros::this_node::getName().c_str(), visual_contact_timeout);
     ROS_ERROR("[%s]: Visual contact broken for longer than %.2f sec! Following terminated!", ros::this_node::getName().c_str(), visual_contact_timeout);
     contact_broken = true;
   }
@@ -265,6 +270,10 @@ void rightBlinkersCallback(const uvdar_core::ImagePointsWithFloatStamped& msg) {
 }
 //}
 
+/* backBlinkersCallback //{ */
+void backBlinkersCallback(const uvdar_core::ImagePointsWithFloatStamped& msg) {
+  back_blinkers = msg.points.size();
+}
 /* uvdarCallback //{ */
 void uvdarCallback(const mrs_msgs::PoseWithCovarianceArrayStamped& uvdar_msg) {
   if (!initialized) {
@@ -340,6 +349,7 @@ int main(int argc, char** argv) {
   uvdar_subscriber           = nh.subscribe("uvdar_in", 10, &uvdarCallback);
   left_blinkers_subscriber   = nh.subscribe("left_blinkers_in", 10, &leftBlinkersCallback);
   right_blinkers_subscriber  = nh.subscribe("right_blinkers_in", 10, &rightBlinkersCallback);
+  back_blinkers_subscriber  = nh.subscribe("back_blinkers_in", 10, &backBlinkersCallback);
   leader_odometry_subscriber = nh.subscribe("leader_odometry_in", 10, &leaderOdometryCallback);
 
   score_publisher                  = nh.advertise<std_msgs::Int64>("score_out", 1);
@@ -356,7 +366,7 @@ int main(int argc, char** argv) {
 
   ROS_INFO("[%s]: Waiting for position from UVDAR...", ros::this_node::getName().c_str());
   while (ros::ok()) {
-    if (left_blinkers + right_blinkers > 1) {
+    if (left_blinkers + right_blinkers + back_blinkers > 1) {
       last_contact_time = ros::Time::now();
       break;
     }
@@ -365,7 +375,6 @@ int main(int argc, char** argv) {
   }
   mrs_lib::ParamLoader param_loader(nh, "follower");
   initialized    = true;
-  auto dr_config = fc.initialize(param_loader);
   dynamic_reconfigure_server.updateConfig(dr_config);
   dynamic_reconfigure_callback_t = boost::bind(&FollowerController::dynamicReconfigureCallback, fc, _1, _2);
   dynamic_reconfigure_server.setCallback(dynamic_reconfigure_callback_t);
