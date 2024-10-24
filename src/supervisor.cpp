@@ -16,9 +16,9 @@
 #include <mrs_msgs/String.h>
 #include <mrs_msgs/PoseWithCovarianceArrayStamped.h>
 
-#include <leader_follower_task/message_utils.h>
-#include <leader_follower_task/follower.h>
-#include <leader_follower_task/FollowerConfig.h>
+#include <leader_follower_task_tutorial/message_utils.h>
+#include <leader_follower_task_tutorial/follower.h>
+#include <leader_follower_task_tutorial/FollowerConfig.h>
 
 #define MAX_ERRONEOUS_COMMANDS_COUNT 10
 
@@ -375,6 +375,7 @@ int main(int argc, char** argv) {
   }
   mrs_lib::ParamLoader param_loader(nh, "follower");
   initialized    = true;
+  auto dr_config = fc.initialize(param_loader); 
   dynamic_reconfigure_server.updateConfig(dr_config);
   dynamic_reconfigure_callback_t = boost::bind(&FollowerController::dynamicReconfigureCallback, fc, _1, _2);
   dynamic_reconfigure_server.setCallback(dynamic_reconfigure_callback_t);
