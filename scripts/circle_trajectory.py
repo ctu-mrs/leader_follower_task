@@ -61,7 +61,7 @@ def generate_trajectory():
         yaw_values.append(yaw)
 
     home = expanduser("~")
-    fname = home + '/f4f_ws/src/leader_follower_task/trajectories/leader_circle_' + 'ms.txt'
+    fname = home + '/f4f_ws/src/leader_follower_task/trajectories/leader_circle' + '.txt'
     with open(fname, 'w', encoding='utf-8') as f:
         f.write(str(X[0]) + ', ' + str(Y[0]) + ', ' + str(3.0) + ', ' + '1.5' + '\n')
         for i in range(1, len(X)):
