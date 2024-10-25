@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.2)
-project(leader_follower_task_tutorial)
+project(leader_follower_task)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

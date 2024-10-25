@@ -48,7 +48,7 @@ mrs_uav_managers:
           snap: 20.0
 
       heading:
-        speed: 1.0
+        speed: 5.0
         acceleration: 1.0
         jerk: 10.0
         snap: 10.0
@@ -56,7 +56,7 @@ mrs_uav_managers:
       angular_speed:
         roll: 60.0
         pitch: 60.0
-        yaw: 10.0
+        yaw: 60.0
 
       tilt: 60.0 # [deg]
 
@@ -74,3 +74,19 @@ mrs_uav_managers:
       gps_garmin: "medium"
       # rtk: "medium"
 
+mrs_uav_trackers:
+
+  mpc_tracker:
+
+    wiggle:
+      enabled: false
+      amplitude: 0.5 # [m]
+      frequency: 0.2 # [Hz]
+
+    # mrs collision avoidance
+    collision_avoidance:
+
+      enabled:           true # disabling this will stop this UAV to react to others, but it will still transmit data to others
+      enabled_passively: true # disabling this will stop this uav to even transmit its data to others (only if enabled: false)
+      radius: 1.0 # [m]
+      correction: 1.0 # [m]

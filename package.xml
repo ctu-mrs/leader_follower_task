@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>leader_follower_task_tutorial</name>
+  <name>leader_follower_task</name>
   <version>1.6.0</version>
   <description>TODO</description>
   <maintainer email="stibipet@fel.cvut.cz">Petr Štibinger</maintainer>

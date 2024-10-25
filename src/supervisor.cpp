@@ -16,9 +16,9 @@
 #include <mrs_msgs/String.h>
 #include <mrs_msgs/PoseWithCovarianceArrayStamped.h>
 
-#include <leader_follower_task_tutorial/message_utils.h>
-#include <leader_follower_task_tutorial/follower.h>
-#include <leader_follower_task_tutorial/FollowerConfig.h>
+#include <leader_follower_task/message_utils.h>
+#include <leader_follower_task/follower.h>
+#include <leader_follower_task/FollowerConfig.h>
 
 #define MAX_ERRONEOUS_COMMANDS_COUNT 10
 

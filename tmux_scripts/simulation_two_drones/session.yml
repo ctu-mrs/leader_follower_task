@@ -66,7 +66,7 @@ windows:
       panes:
         - 'export UAV_NAME=uav1; history -s $(echo waitForControl\; roslaunch mrs_uav_trajectory_loader load.launch path:=`rospack find leader_follower_task`/trajectories config:=./config/trajectory_loader.yaml\; sleep 2\; rosservice call /$UAV_NAME/control_manager/goto_trajectory_start)
           '
-        - 'export UAV_NAME=uav2; history -s $(echo waitForControl\; rosservice call /$UAV_NAME/control_manager/goto \"\[11.5, 4.5, 3.2, 0.0\]\")
+        - 'export UAV_NAME=uav2; history -s $(echo waitForControl\; rosservice call /$UAV_NAME/control_manager/goto \"\[10, -4, 3.2, 1.5\]\")
           '
   - follower:
       layout: even-vertical
@@ -81,10 +81,10 @@ windows:
           history -s rosservice call /$UAV_NAME/control_manager/start_trajectory_tracking'
         - 'export UAV_NAME=uav2;
           history -s rosservice call /$UAV_NAME/supervisor/start_score_counting'
-  - gazebo_camera_follow:
-      layout: tiled
-      panes:
-        - export UAV_NAME=uav2; waitForControl; sleep 8; gz camera -c gzclient_camera -f uav2
+  #- gazebo_camera_follow:
+      #layout: tiled
+      #panes:
+        # - export UAV_NAME=uav2; waitForControl; sleep 8; gz camera -c gzclient_camera -f uav2
         # - waitForControl; sleep 5; ~/.i3/layout_manager.sh layout.json
   - rviz:
       layout: tiled
