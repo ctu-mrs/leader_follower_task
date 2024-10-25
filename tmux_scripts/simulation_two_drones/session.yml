@@ -54,11 +54,11 @@ windows:
   - uv_observer:
       layout: even-vertical
       panes:
-        - export UAV_NAME=uav2; waitForControl; roslaunch leader_follower_task_tutorial uvdar_dual_cameras.launch use_4DHT:=false
+        - export UAV_NAME=uav2; waitForControl; roslaunch leader_follower_task uvdar_dual_cameras.launch use_4DHT:=false
   - kalman_filter:
       layout: even-vertical
       panes:
-        - export UAV_NAME=uav2; waitForControl; roslaunch leader_follower_task_tutorial uvdar_kalman.launch output_frame:=$UAV_NAME/stable_origin
+        - export UAV_NAME=uav2; waitForControl; roslaunch leader_follower_task uvdar_kalman.launch output_frame:=$UAV_NAME/stable_origin
   - goto_start:
       layout: even-vertical
       synchronize: after
