@@ -51,7 +51,7 @@ A <<
 /* predict //{ */
 VelocityEstimator::kalman3D::x_t VelocityEstimator::predict(Eigen::Vector3d velocity_estimate, double dt_since_last_prediction) {
   kalman3D::u_t u;
-  u << velocity_estimate.x(), velocity_estimate.y();
+  u << velocity_estimate.x(), velocity_estimate.y(), velocity_estimate.z();
   kalman3D::A_t A_new;
   A_new << 
     1, 0, 0, dt, 0, 0,
