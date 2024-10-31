@@ -36,9 +36,6 @@ VelocityEstimator estimator;
 Eigen::Vector3d   leader_predicted_position;
 Eigen::Vector3d   leader_predicted_velocity;
 
-ReferenceTrajectory leader_trajectory;
-double epsilon = 3;
-
 /* initialize //{ */
 leader_follower_task::FollowerConfig FollowerController::initialize(mrs_lib::ParamLoader& param_loader) {
 
@@ -164,14 +161,6 @@ void FollowerController::receiveUvdar(const geometry_msgs::PoseWithCovarianceSta
   if (use_estimator && is_initialized) {
     estimator.fuse(leader_new_position);
   }
-/*
-  leader_trajectory.positions.push_back(leader_position);
-  leader_trajectory.headings.push_back(leader_heading);
-*/
-/*
-	ROS_INFO("point added: x=%f, y=%f, z=%f , heading=%f", leader_position.x(), leader_position.y(), leader_position.z(), leader_heading);
-	ROS_INFO("leader_trajectory size - Positions:%lu -Headings:%lu", leader_trajectory.positions.size(), leader_trajectory.headings.size());
-*/
 }
 //}
 
@@ -179,10 +168,6 @@ void FollowerController::receiveUvdar(const geometry_msgs::PoseWithCovarianceSta
 ReferencePoint FollowerController::createReferencePoint() {
   ReferencePoint point;
 
-/*
-  leader_trajectory.positions.push_back(leader_predicted_position);
-  leader_trajectory.headings.push_back(leader_heading);
-*/
   // sanity check
   if (!is_initialized || !got_odometry || !got_uvdar || !got_tracker_output) {
     point.position        = Eigen::Vector3d(0, 0, 0);
@@ -190,34 +175,6 @@ ReferencePoint FollowerController::createReferencePoint() {
     point.use_for_control = false;
     return point;
   }
-/*
-  ROS_INFO("Point :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-  ROS_INFO("Follower_pos :x=%f, y=%f, z=%f, heading=%f", follower_position_tracker.x(), follower_position_tracker.y(), follower_position_tracker.z(), follower_heading_tracker);
-
-  ROS_INFO("Cond_1 =%f, Cond_2 =%f", std::abs(leader_trajectory.positions[0].x() - follower_position_tracker.x()), std::abs(leader_trajectory.positions[0].y() - follower_position_tracker.y()));
-
-  if (!leader_trajectory.positions.empty() && !leader_trajectory.headings.empty() &&
-    std::abs(leader_trajectory.positions[0].x() - follower_position_tracker.x()) < epsilon &&
-    std::abs(leader_trajectory.positions[0].y() - follower_position_tracker.y()) < epsilon ) {
-
-    ROS_INFO("Taille avant suppression - Positions: %lu, Heading: %lu",
-    leader_trajectory.positions.size(), leader_trajectory.headings.size());
-
-    ROS_INFO("Point_0 avant supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-		ROS_INFO("Point_1 avant supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[1].x(), leader_trajectory.positions[1].y(), leader_trajectory.positions[1].z(), leader_trajectory.headings[1]);
-
-    leader_trajectory.positions.erase(leader_trajectory.positions.begin());
-    leader_trajectory.headings.erase(leader_trajectory.headings.begin());
-
-    ROS_INFO("Taille apres suppression - Positions: %lu, Heading: %lu",
-    leader_trajectory.positions.size(), leader_trajectory.headings.size()); 
-
-    ROS_INFO("Point_0 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-    ROS_INFO("Point_1 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[1].x(), leader_trajectory.positions[1].y(), leader_trajectory.positions[1].z(), leader_trajectory.headings[1]);
-		ROS_INFO("Point_2 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[2].x(), leader_trajectory.positions[2].y(), leader_trajectory.positions[2].z(), leader_trajectory.headings[2]);
-
-  }
-*/
 
   double radius = leader_position.norm();
   double alpha  = atan2(leader_position.y(), leader_position.x());
@@ -246,75 +203,50 @@ ReferencePoint FollowerController::createReferencePoint() {
 
 /* createReferenceTrajectory //{ */
 ReferenceTrajectory FollowerController::createReferenceTrajectory() {
+  ReferenceTrajectory trajectory;
 
   // sanity check
   if (!is_initialized || !got_odometry || !got_uvdar || !got_tracker_output) {
-    leader_trajectory.positions.push_back(Eigen::Vector3d::Zero());
-    leader_trajectory.headings.push_back(0.0);
-    leader_trajectory.sampling_time   = 0.0;
-    leader_trajectory.use_for_control = false;
-    return leader_trajectory;
+    trajectory.positions.push_back(Eigen::Vector3d::Zero());
+    trajectory.headings.push_back(0.0);
+    trajectory.sampling_time   = 0.0;
+    trajectory.use_for_control = false;
+    return trajectory;
   }
 
   // Example - start trajectory at current UAV position and move in the predicted direction of leader motion
   // No subsampling, only two points are created in this example
-  Eigen::Vector3d point;
-  double          heading;
+  Eigen::Vector3d point_1;
+  double          heading_1;
 
-  leader_trajectory.use_for_control = false;
+  Eigen::Vector3d point_2;
+  double          heading_2;
+
+  trajectory.use_for_control = false;
   if (use_trajectory_reference) {
     if (use_estimator) {
- 			 
-      point   = leader_position + position_offset;
-      heading = leader_heading;
+      point_1   = follower_position_tracker;
+      heading_1 = follower_heading_tracker;
 
-			if ((follower_position_tracker - point).norm() < 10) {
+      point_2   = leader_predicted_position + position_offset + (leader_predicted_velocity * control_action_interval);
+      heading_2 = heading_offset;
 
-				 leader_trajectory.positions.push_back(point);
-     		 leader_trajectory.headings.push_back(heading);
-			}
+      trajectory.positions.push_back(point_1);
+      trajectory.positions.push_back(point_2);
 
-      ROS_INFO("Point :x=%f, y=%f, z=%f, heading=%f", point.x(), point.y(), point.z(), heading);
-
-      leader_trajectory.sampling_time   = control_action_interval;
-      leader_trajectory.use_for_control = true;
-    }
-
-	  else {
+      trajectory.headings.push_back(heading_1);
+      trajectory.headings.push_back(heading_2);
+      trajectory.sampling_time   = control_action_interval;
+      trajectory.use_for_control = true;
+    } else {
       ROS_WARN("[%s]: Tried to plan a trajectory without leader velocity estimation", ros::this_node::getName().c_str());
     }
   }
-/*
-  ROS_INFO("Point :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-  ROS_INFO("Follower_pos :x=%f, y=%f, z=%f, heading=%f", follower_position_tracker.x(), follower_position_tracker.y(), follower_position_tracker.z(), follower_heading_tracker);
 
-  ROS_INFO("Cond_1 =%f, Cond_2 =%f", std::abs(leader_trajectory.positions[0].x() - follower_position_tracker.x()), std::abs(leader_trajectory.positions[0].y() - follower_position_tracker.y()));
-
-
-
-  if (!leader_trajectory.positions.empty() && !leader_trajectory.headings.empty() &&
-    std::abs(leader_trajectory.positions[0].x() - follower_position_tracker.x()) < epsilon &&
-    std::abs(leader_trajectory.positions[0].y() - follower_position_tracker.y()) < epsilon ) {
-
-    ROS_INFO("Taille avant suppression - Positions: %lu, Heading: %lu",
-    leader_trajectory.positions.size(), leader_trajectory.headings.size());
-
-    ROS_INFO("Point_0 avant supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-		ROS_INFO("Point_1 avant supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[1].x(), leader_trajectory.positions[1].y(), leader_trajectory.positions[1].z(), leader_trajectory.headings[1]);
-
-    leader_trajectory.positions.erase(leader_trajectory.positions.begin());
-    leader_trajectory.headings.erase(leader_trajectory.headings.begin());
-
-    ROS_INFO("Taille apres suppression - Positions: %lu, Heading: %lu", leader_trajectory.positions.size(), leader_trajectory.headings.size()); 
-
-    ROS_INFO("Point_0 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[0].x(), leader_trajectory.positions[0].y(), leader_trajectory.positions[0].z(), leader_trajectory.headings[0]);
-    ROS_INFO("Point_1 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[1].x(), leader_trajectory.positions[1].y(), leader_trajectory.positions[1].z(), leader_trajectory.headings[1]);
-		ROS_INFO("Point_2 apres supression :x=%f, y=%f, z=%f, heading=%f", leader_trajectory.positions[2].x(), leader_trajectory.positions[2].y(), leader_trajectory.positions[2].z(), leader_trajectory.headings[2]);
-
-  }
-*/
-  return leader_trajectory;
+  return trajectory;
 }
+
+
 //}
 
 /* createVelocityReference //{ */
@@ -341,11 +273,6 @@ VelocityReference FollowerController::createVelocityReference() {
   }
 
   return velocity_cmd;
-
- /* ROS_INFO("command.velocity : x=%f, y=%f, z=%f", command.velocity.x(), command.velocity.y(), command.velocity.z());
-  ROS_INFO("norm velocity : %f", command.velocity.norm());
-  */
-
 }
 //}
 
