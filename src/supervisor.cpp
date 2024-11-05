@@ -342,7 +342,7 @@ int main(int argc, char** argv) {
 
   std::string       reference_frame;
   std::stringstream ss;
-  ss << std::getenv("UAV_NAME") << "world_origin";
+  ss << std::getenv("UAV_NAME") << "/world_origin";
   uav_frame = ss.str();
 
   odometry_subscriber        = nh.subscribe("odometry_in", 10, &odometryCallback);
