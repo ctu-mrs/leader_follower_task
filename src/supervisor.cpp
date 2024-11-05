@@ -22,7 +22,7 @@
 
 #define MAX_ERRONEOUS_COMMANDS_COUNT 10
 
-#define MIN_COMMAND_HEIGHT 2.0               // [m]
+#define MIN_COMMAND_HEIGHT -2.0               // [m]
 #define MAX_COMMAND_HEIGHT 4.0               // [m]
 #define MAX_COMMAND_DISTANCE_THRESHOLD 15.0  // [m]
 #define MAX_VELOCITY_MAGNITUDE 20.0           // [m/s]
@@ -73,11 +73,12 @@ Eigen::Vector3d follower_pos_cmd;
 
 FollowerController fc;
 std::string        uav_frame;
+std::string        world_frame;
 
 /* publishLeaderRawPos //{ */
 void publishLeaderRawPos() {
   nav_msgs::Odometry leader_raw_pos;
-  leader_raw_pos.header.frame_id      = uav_frame;
+  leader_raw_pos.header.frame_id      = world_frame;
   leader_raw_pos.header.stamp         = ros::Time::now();
   leader_raw_pos.pose.pose.position.x = leader_raw_pos_uvdar.x();
   leader_raw_pos.pose.pose.position.y = leader_raw_pos_uvdar.y();
@@ -90,7 +91,7 @@ void publishLeaderRawPos() {
 /* publishLeaderFilteredPos //{ */
 void publishLeaderFilteredPos() {
   auto leader_estim_pos            = fc.getCurrentEstimate();
-  leader_estim_pos.header.frame_id = uav_frame;
+  leader_estim_pos.header.frame_id = world_frame;
   leader_estim_pos.header.stamp    = ros::Time::now();
   leader_estim_pos_publisher.publish(leader_estim_pos);
 }
@@ -341,8 +342,12 @@ int main(int argc, char** argv) {
 
   std::string       reference_frame;
   std::stringstream ss;
-  ss << std::getenv("UAV_NAME") << "/world_origin";
+  ss << std::getenv("UAV_NAME") << "/fcu";
   uav_frame = ss.str();
+
+  ss << std::getenv("UAV_NAME") << "/world_origin";
+  world_frame = ss.str();
+
 
   odometry_subscriber        = nh.subscribe("odometry_in", 10, &odometryCallback);
   position_cmd_subscriber    = nh.subscribe("position_cmd_in", 10, &positionCmdCallback);

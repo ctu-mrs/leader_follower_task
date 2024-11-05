@@ -176,18 +176,11 @@ ReferencePoint FollowerController::createReferencePoint() {
     return point;
   }
 
-  double radius = leader_position.norm();
-  double alpha  = atan2(leader_position.y(), leader_position.x());
-  double offset_rad = 20 * M_PI/180; 
-
   if (use_estimator) {
-    point.position.x() = (radius) * cos (alpha - offset_rad);
-    point.position.y() = (radius) * sin (alpha - offset_rad);
-    point.position.z() = 3.0;
+    point.position.x() = 0.0;
+    point.position.y() = 0.0;
+    point.position.z() = 0.0;
      
-   ROS_INFO("leader position :x=%f ,y=%f", leader_position.x(), leader_position.y());
-   ROS_INFO("point :x=%f, y=%f", point.position.x(), point.position.y());
-
   } else {
     point.position.x() = leader_position.x() + position_offset.x();
     point.position.y() = leader_position.y() + position_offset.y();
