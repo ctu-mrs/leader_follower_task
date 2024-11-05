@@ -193,8 +193,9 @@ ReferencePoint FollowerController::createReferencePoint() {
     point.position.y() = leader_position.y() + position_offset.y();
     point.position.z() = 3.0;
   }
+
   point.heading        = leader_heading;
-  
+
   point.use_for_control = true;
 
   return point;
