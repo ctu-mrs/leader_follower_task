@@ -49,9 +49,9 @@ windows:
         - export UAV_NAME=uav1; waitForControl; rosservice call /$UAV_NAME/hw_api/arming 1; sleep 2; rosservice call /$UAV_NAME/hw_api/offboard
         - export UAV_NAME=uav2; waitForControl; rosservice call /$UAV_NAME/hw_api/arming 1; sleep 2; rosservice call /$UAV_NAME/hw_api/offboard
   - tf_connector:
-      layout: tiled
-      panes:
-        - waitForTime; roslaunch mrs_tf_connector tf_connector.launch custom_config:=./config/tf_connector.yaml
+     layout: tiled
+     panes:
+       - waitForTime; roslaunch mrs_tf_connector tf_connector.launch custom_config:=./config/tf_connector.yaml
   - uv_observer:
       layout: even-vertical
       panes:
