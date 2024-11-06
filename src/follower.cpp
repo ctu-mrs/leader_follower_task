@@ -176,18 +176,39 @@ ReferencePoint FollowerController::createReferencePoint() {
     return point;
   }
 
+  double         radius = 5;
+  double         epsilon = 0.5;
+  double         delta = leader_position.norm() - radius;
+
+
+  ROS_INFO("leader position: x=%f, y=%f, z=%f, h=%f", leader_position.x(), leader_position.y(), leader_position.z(), leader_heading);
+  ROS_INFO("leader predicted position: x=%f, y=%f, z=%f, h=%f", leader_predicted_position.x(), leader_predicted_position.y(), leader_predicted_position.z(), leader_heading);
+
+  ROS_INFO("distance =%f", leader_position.norm());
+
+
+
   if (use_estimator) {
-    point.position.x() = 0.0;
-    point.position.y() = 0.0;
-    point.position.z() = 0.0;
-     
+    if (delta < -epsilon) {
+      point.position = - position_offset;
+      point.heading = atan2(leader_position.y(), leader_position.x());
+    
+    } else {
+      point.position.x() = leader_position.x() - radius * cos(leader_heading);
+      point.position.y() = leader_position.y() - radius * sin(leader_heading);
+      point.position.z() = leader_position.z();
+      
+      point.heading = atan2(leader_position.y(), leader_position.x());
+    }
+
   } else {
     point.position.x() = leader_position.x() + position_offset.x();
     point.position.y() = leader_position.y() + position_offset.y();
     point.position.z() = 3.0;
   }
-  point.heading        = leader_heading;
   
+  ROS_INFO("Point: x=%f, y=%f, z=%f, h=%f", point.position.x(), point.position.y(), point.position.z(), point.heading);
+ 
   point.use_for_control = true;
 
   return point;
@@ -214,31 +235,30 @@ ReferenceTrajectory FollowerController::createReferenceTrajectory() {
 
   Eigen::Vector3d point_2;
   double          heading_2;
-
   trajectory.use_for_control = false;
-  if (use_trajectory_reference) {
-    if (use_estimator) {
-      point_1   = follower_position_tracker;
-      heading_1 = follower_heading_tracker;
+    if (use_trajectory_reference) {
+          if (use_estimator) {
+            point_1   = follower_position_tracker;
+            heading_1 = follower_heading_tracker;
 
-      point_2   = leader_predicted_position + position_offset + (leader_predicted_velocity * control_action_interval);
-      heading_2 = heading_offset;
+            point_2   = leader_predicted_position + position_offset + (leader_predicted_velocity * control_action_interval);
+            heading_2 = heading_offset;
 
-      trajectory.positions.push_back(point_1);
-      trajectory.positions.push_back(point_2);
+            trajectory.positions.push_back(point_1);
+            trajectory.positions.push_back(point_2);
 
-      trajectory.headings.push_back(heading_1);
-      trajectory.headings.push_back(heading_2);
-      trajectory.sampling_time   = control_action_interval;
-      trajectory.use_for_control = true;
-    } else {
-      ROS_WARN("[%s]: Tried to plan a trajectory without leader velocity estimation", ros::this_node::getName().c_str());
+            trajectory.headings.push_back(heading_1);
+            trajectory.headings.push_back(heading_2);
+
+            trajectory.sampling_time   = control_action_interval;
+            trajectory.use_for_control = true;
+          } else {
+            ROS_WARN("[%s]: Tried to plan a trajectory without leader velocity estimation", ros::this_node::getName().c_str());
+          }
     }
-  }
 
   return trajectory;
 }
-
 
 //}
 

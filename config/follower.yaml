@@ -1,11 +1,11 @@
 reference_frame: "world_origin"
 
-control_action_interval: 0.1 # [s]
+control_action_interval: 0.2 # [s]
 uvdar_msg_interval: 0.01 # [s]
 
 # offset from the leader position to be maintained
 desired_offset:
-  x: 0.0 # [m]
+  x: 1.0 # [m]
   y: 0.0  # [m]
   z: 0.0 # [m]
 

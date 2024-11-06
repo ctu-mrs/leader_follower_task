@@ -4,4 +4,4 @@ trajectory:
   # Options specified here will override the common options above.
   uavs:
     uav1:
-      filename: "leader_circle.txt"
+      filename: "leader_0.5ms.txt"

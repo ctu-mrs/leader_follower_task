@@ -19,7 +19,7 @@ def generate_trajectory():
     B = 10
     h = 0
     k = 0
-    t = np.linspace(0, 2 * np.pi, 300)
+    t = np.linspace(0, 2 * np.pi, 1000)
     X = []
     Y = []
    

@@ -24,7 +24,7 @@
 
 #define MIN_COMMAND_HEIGHT -2.0               // [m]
 #define MAX_COMMAND_HEIGHT 4.0               // [m]
-#define MAX_COMMAND_DISTANCE_THRESHOLD 15.0  // [m]
+#define MAX_COMMAND_DISTANCE_THRESHOLD 50.0  // [m]
 #define MAX_VELOCITY_MAGNITUDE 20.0           // [m/s]
 #define MAX_SEPARATION_THRESHOLD 15.0        // [m]
 
@@ -34,7 +34,7 @@ bool contact_broken = false;
 bool counting_score = false;
 
 double visual_contact_timeout  = 2.5;   // [s]
-double command_timeout         = 2.5;   // [s]
+double command_timeout         = 5;   // [s]
 double score_timer_interval    = 0.01;  // [s]
 double control_action_interval = 0.0;   // [s]
 

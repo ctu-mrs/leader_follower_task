@@ -41,7 +41,7 @@ def generate_spline():
              [ 16, 2 ]])
 # #}
 
-    v = 1.0
+    v = 0.5
     dt = 0.2
 
     ds = v*dt
@@ -63,14 +63,23 @@ def generate_spline():
     u_resampled = np.linspace(u.min(), u.max(), num_samples)
     x_resampled, y_resampled= splev(u_resampled, tck, der=0)
 
+    yaw_values = []
+    for i in range (1, len(x_resampled)):
+        dx = x_resampled[i] - x_resampled[i-1]
+        dy = y_resampled[i] - y_resampled[i-1]
+        yaw = math.atan2(dy,dx)
+        yaw_values.append(yaw)
+
+
     home = expanduser("~")
-    fname = home + '/workspace/src/leader_follower_task/trajectories/leader_' + str(v) + 'ms.txt'
+    fname = home + '/f4f_ws/src/leader_follower_task/trajectories/leader_' + str(v) + 'ms.txt'
     with open(fname, 'w', encoding='utf-8') as f:
-        for i in range(0, len(x_resampled)):
+        f.write(str(x_resampled[0]) + ', ' + str(y_resampled[0]) + ', ' + str (3.0) + ', ' + str(3.14) + '\n')
+        for i in range(1, len(x_resampled)):
             x = x_resampled[i];
             y = y_resampled[i];
             z = 3.0;
-            yaw = 0.0;
+            yaw = yaw_values[i-1];
 
             line = str(x) + ', ' + str(y) + ', ' + str(z) + ', ' + str(yaw) + '\n'
             f.write(line)

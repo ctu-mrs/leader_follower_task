@@ -66,7 +66,7 @@ windows:
       panes:
         - 'export UAV_NAME=uav1; history -s $(echo waitForControl\; roslaunch mrs_uav_trajectory_loader load.launch path:=`rospack find leader_follower_task`/trajectories config:=./config/trajectory_loader.yaml\; sleep 2\; rosservice call /$UAV_NAME/control_manager/goto_trajectory_start)
           '
-        - 'export UAV_NAME=uav2; history -s $(echo waitForControl\; rosservice call /$UAV_NAME/control_manager/goto \"\[10, -4, 3.2, 1.5\]\")
+        - 'export UAV_NAME=uav2; history -s $(echo waitForControl\; rosservice call /$UAV_NAME/control_manager/goto \"\[20, 0.0, 3.2, 3.14\]\")
           '
   - follower:
       layout: even-vertical
