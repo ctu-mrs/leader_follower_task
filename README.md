@@ -7,6 +7,7 @@
 <!-- --- -->
 
 # Leader-Follower task
+
 | Build status | [![Build Status](https://github.com/ctu-mrs/leader_follower_task/actions/workflows/ros_build_test.yaml/badge.svg?branch=master)](https://github.com/ctu-mrs/leader_follower_task/actions) |
 | ---          | ---                                                                                                                                                                                       |
 
@@ -15,21 +16,26 @@
 In this task, we will explore a state-of-the-art system for coordinated motion of multiple robots without direct communication. The system consists of two parts - blinking UV markers, which are fitted to each robot, and onboard cameras capable of UV-only sensing. Using this unique approach, the robots are capable of determining the relative position of their neighbors without the need to exchange any information via a communication link. This allows the UAVs to operate in environments with dense electromagnetic interference or coordinate motion of multiple robots with mutually incompatible localization systems (e.g. GPS and SLAM).
 
 ## Installation
+
 1) The installation requires the open-source [MRS UAV System](https://github.com/ctu-mrs/mrs_uav_system). Please follow the installation [instructions](https://github.com/ctu-mrs/mrs_uav_system?tab=readme-ov-file#installation) and install the stable full version. The full version also includes a Gazebo simulation environment which you will use. We highly recommend the native installation.
 
 2) Install [uvdar_core](https://github.com/ctu-mrs/uvdar_core/tree/release) and [uvdar_gazebo_plugin](https://github.com/ctu-mrs/uvdar_gazebo_plugin/tree/release). With the native installation, it can be added from CTU-MRS PPA:
+
 ```bash
 sudo apt install ros-noetic-uvdar-core ros-noetic-uvdar-gazebo-plugin
 ```
+
 otherwise the repos can be cloned and built in a catkin workspace.
 
 3) After installing the system, clone this repository and its submodules:
+
 ```bash
 cd ~/git
 git clone https://github.com/ctu-mrs/leader_follower_task.git
 ```
 
 4) [FOR NATIVE ROS INSTALLATION]: Setup a local catkin workspace (e.g. in a folder named `workspace` in your home)
+
 ```bash
 cd ~/
 mkdir -p workspace/src
@@ -41,6 +47,7 @@ catkin config --extend /opt/ros/noetic
 ```
 
 5) Build the catkin workspace
+
 ```bash
 cd ~/workspace
 catkin build
@@ -70,7 +77,9 @@ Your entry point to the system is the [`src/follower.cpp`](https://github.com/ct
 These methods are periodically called by the [`supervisor`](https://github.com/ctu-mrs/leader_follower_task/src/supervisor.cpp). This is a ROS node running onboard the follower UAV. **Do not modify the supervisor node! Your supervisor node will not be used for evaluation!**
 
 ## Simulation and a Reference solution
+
 The provided code also includes a very crude solution. This solution will take the latest known leader pose, add a desired offset (loaded from a config file), and set it as the reference point for the follower. You may try running this code by opening the `tmux_scripts/two_drones_uvdar` folder and running the script:
+
 ```bash
 ./start.sh
 ````
@@ -82,11 +91,13 @@ Upon running the script, you should see 3 windows opening up:
 * UVDAR visualization - view of the two cameras onboard the follower UAV
 
 ### How to confirm everything works
+
 * In the Gazebo GUI, check that the time at the bottom of the window is running.
 * After a few seconds, you should see two drones. The drones will take off automatically.
 * After the takeoff, you should see two windows with the view of the UVDAR cameras. The view will be mostly black, but you may see small markers in one of the windows which indicate the UV markers on the leader drone.
 
 ### Starting the task
+
 You may notice, that your terminal opened multiple tabs. Consult the first page of the [MRS Cheatsheet](https://github.com/ctu-mrs/mrs_cheatsheet) if you need help navigating the tabs and panes.
 **After the UAVs take off, your input has to be provided manually.**
 
@@ -96,6 +107,7 @@ You may notice, that your terminal opened multiple tabs. Consult the first page 
 * Now, you can navigate back to the `follower` tab, and observe the simulation. Once the visual contact is broken, the process in the follower tab will print out the score.
 
 ### How to close the simulation
+
 * Do not close the terminal window, the processes may remain running in the background.
 * Use the following key shorcut: press `ctrl + a`, then release and then press `k`. A popup window will ask you to confirm. Navigate to it and press `Enter` or hit `9` to confirm. This will close all the terminal tabs, which have been opened by the simulator
 * We strongly recommend using the key shortcut to kill every simulation, to prevent zombie processes ruining your future simulations.
@@ -109,15 +121,16 @@ You may notice that the reference solution does not produce a smooth control inp
 * Setting a single reference point to the controller will cause the UAV to decelerate and stop moving once the destination has been reached.
 
 ### Let's improve the follower code
+
 There are a few steps that may help you. It is not necessary to follow them. You may skip this section completely and craft a solution on your own.
 
-  * Experiment with the desired offset. You may get better results just by adjusting the distance between the leader and the follower. You can use the [config/follower.yaml](https://github.com/ctu-mrs/leader_follower_task/blob/master/config/follower.yaml) if you want to change the settings without the need for compilation. (You will still need to restart the node.)
-  * Experiment with the control action rate, also adjustable in the config file.
-  * Estimate the leader's velocity. An estimator based on the Kalman filter is already provided in the code, but in the default solution it is unused. Filter parameters may be loaded from the config file as well.
-  * You can give the follower three types of control commands: ReferencePoint (this is done in the default solution), ReferenceTrajectory and VelocityReference. Inside each command, there is a boolean variable called `use_for_control`. If you set this value to `true`, the supervisor node will attempt to use this command for control.
-  * If multiple commands are available at the same time, only the highest ranking command in the following hierarchy will be used: VelocityReference > ReferenceTrajectory > ReferencePoint.
-  * In computer vision, distance to an object tends to be more difficult to estimate than its bearing. Therefore, the position tracking works much better if the line of sight from camera is directly perpendicular to the direction of leader's motion. If the leader moves along the line of sight from the camera, retrieving the position becomes much more difficult.
-  * You are not required to perfectly copy the leader's trajectory. You only have to track the leader for as long as possible.
+* Experiment with the desired offset. You may get better results just by adjusting the distance between the leader and the follower. You can use the [config/follower.yaml](https://github.com/ctu-mrs/leader_follower_task/blob/master/config/follower.yaml) if you want to change the settings without the need for compilation. (You will still need to restart the node.)
+* Experiment with the control action rate, also adjustable in the config file.
+* Estimate the leader's velocity. An estimator based on the Kalman filter is already provided in the code, but in the default solution it is unused. Filter parameters may be loaded from the config file as well.
+* You can give the follower three types of control commands: ReferencePoint (this is done in the default solution), ReferenceTrajectory and VelocityReference. Inside each command, there is a boolean variable called `use_for_control`. If you set this value to `true`, the supervisor node will attempt to use this command for control.
+* If multiple commands are available at the same time, only the highest ranking command in the following hierarchy will be used: VelocityReference > ReferenceTrajectory > ReferencePoint.
+* In computer vision, distance to an object tends to be more difficult to estimate than its bearing. Therefore, the position tracking works much better if the line of sight from camera is directly perpendicular to the direction of leader's motion. If the leader moves along the line of sight from the camera, retrieving the position becomes much more difficult.
+* You are not required to perfectly copy the leader's trajectory. You only have to track the leader for as long as possible.
 
 ## Things to avoid
 
@@ -127,11 +140,22 @@ There are a few steps that may help you. It is not necessary to follow them. You
 * Pushing physical limits of the UAV. Velocity command larger than 5 m/s will be discarded.
 * Violating these restrictions 10 times in a row will result in challenge termination.
 
+## Troubleshooting
+
+Sometimes you face an error while launching the follower
+
+```text
+[Follower]: waiting, got ODOMETRY=TRUE, UVDAR=FALSE
+```
+
+despite the UVDAR operating correctly (based on the output of the UVDAR panel). A simple workaround for this is to manually set the `got_uvdar` boolean to `true` in `follower.cpp`.
+
 ## References
+
 <details>
   <summary>Walter V., Staub N., Franchi A., and Saska M., "UVDAR System for Visual Relative Localization With Application to Leader–Follower Formations of Multirotor UAVs", IEEE Robotics and Automation Letters 4(3):2637-2644, July 2019.</summary>
 
-```
+```bibtex
 @article{uvdar_dirfol,
   author = "V. {Walter} and N. {Staub} and A. {Franchi} and M. {Saska}",
   journal = "IEEE Robotics and Automation Letters",
@@ -146,12 +170,13 @@ There are a few steps that may help you. It is not necessary to follow them. You
   pdf = "data/papers/walterRAL2019.pdf"
 }
 ```
+
 </details>
 
 <details>
   <summary>Baca, T., Petrlik, M., Vrba, M., Spurny, V., Penicka, R., Hert, D., and Saska, M., "The MRS UAV System: Pushing the Frontiers of Reproducible Research, Real-world Deployment, and Education with Autonomous Unmanned Aerial Vehicles", Journal of Intelligent & Robotic Systems 102, 26 (2021).</summary>
 
-```
+```bibtex
 @article{baca2021mrs,
   author = "Baca, Tomas and Petrlik, Matej and Vrba, Matous and Spurny, Vojtech and Penicka, Robert and Hert, Daniel and Saska, Martin",
   doi = "10.1007/s10846-021-01383-5",
@@ -169,4 +194,5 @@ There are a few steps that may help you. It is not necessary to follow them. You
   year = 2021
 }
 ```
+
 </details>
