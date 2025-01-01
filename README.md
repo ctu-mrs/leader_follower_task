@@ -143,6 +143,7 @@ There are a few steps that may help you. It is not necessary to follow them. You
 ## Troubleshooting
 
 * If you encounter the error `[Follower]: waiting, got ODOMETRY=TRUE, UVDAR=FALSE` despite UVDAR operating correctly (verified via the UVDAR panel), manually set the `got_uvdar` boolean to `true` in `follower.cpp` as a workaround.
+* On the `uv_observer` tab, the error `[UVDARPoseCalculator]: No hypothesis provided. Returning!` can mostly be ignored as long as the demo with UVDAR is working correctly.
 
 ## References
 
