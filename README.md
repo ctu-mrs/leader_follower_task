@@ -142,13 +142,7 @@ There are a few steps that may help you. It is not necessary to follow them. You
 
 ## Troubleshooting
 
-Sometimes you face an error while launching the follower
-
-```text
-[Follower]: waiting, got ODOMETRY=TRUE, UVDAR=FALSE
-```
-
-despite the UVDAR operating correctly (based on the output of the UVDAR panel). A simple workaround for this is to manually set the `got_uvdar` boolean to `true` in `follower.cpp`.
+* If you encounter the error `[Follower]: waiting, got ODOMETRY=TRUE, UVDAR=FALSE` despite UVDAR operating correctly (verified via the UVDAR panel), manually set the `got_uvdar` boolean to `true` in `follower.cpp` as a workaround.
 
 ## References
 
