@@ -13,3 +13,38 @@
 .gitman.old
 
 .ci/deploy_key_github
+
+# Compiled object files
+*.o
+*.obj
+*.lo
+*.a
+*.lib
+*.bin
+*.out
+
+# Logs and temporary files
+*.log
+*.tmp
+*.DS_Store
+
+# IDE-specific files
+.idea/
+.vscode/
+*.user
+*.project
+*.cproject
+
+# Cache and other temporary files
+*.dir
+*.pyc
+*.pyo
+*.class
+
+# CMake 
+*.cmake
+CMakeCache.txt
+cmake.check_cache
+CMakeFiles/
+
+query.json
